@@ -3,14 +3,8 @@ import { FaComment, FaSignOutAlt, FaPlus, FaHashtag, FaClipboard, FaCheck, FaArr
 import RoomCard from './RoomCard.jsx';
 import Modal from './Modal.jsx';
 import Lbl from './Lbl.jsx';
-
-const M = {
-  base: '#0F0F0F', mantle: '#1A1A1A', crust: '#252525',
-  surface0: '#252525', surface1: '#2D2D2D',
-  text: '#FFFFFF', sub0: '#BFBFBF', sub1: '#808080',
-  mauve: '#EA5A3E', green: '#4ADE80', blue: '#60A5FA',
-  red: '#FF6B6B', ov0: '#636363', ov1: '#3A3A3A',
-};
+import ThemeToggle, { getTheme, applyTheme } from './ThemeToggle.jsx';
+import { light, dark } from './Chat/constants.js';
 
 const B = {
   border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 600,
@@ -18,13 +12,7 @@ const B = {
   alignItems: 'center', justifyContent: 'center', gap: '6px',
 };
 
-const I = {
-  background: M.base, border: `1px solid ${M.surface0}`, borderRadius: '8px',
-  color: M.text, fontFamily: 'inherit', fontSize: '0.875rem',
-  padding: '10px 12px', outline: 'none', width: '100%', boxSizing: 'border-box',
-};
-
-function SkeletonCard() {
+function SkeletonCard({ M }) {
   return (
     <div style={{
       background: M.mantle, border: `1px solid ${M.surface0}`, borderRadius: '12px',
@@ -54,6 +42,17 @@ function getToken() {
 }
 
 export default function Dashboard({ token: _token }) {
+  const [theme, setThemeState] = useState(getTheme);
+  const M = theme === 'light' ? light : dark;
+
+  const setTheme = (t) => { setThemeState(t); applyTheme(t); };
+
+  const I = {
+    background: M.base, border: `1px solid ${M.surface0}`, borderRadius: '8px',
+    color: M.text, fontFamily: 'inherit', fontSize: '0.875rem',
+    padding: '10px 12px', outline: 'none', width: '100%', boxSizing: 'border-box',
+  };
+
   const token = _token || getToken();
   const [user, setUser] = useState(null);
   const [rooms, setRooms] = useState([]);
@@ -117,10 +116,11 @@ export default function Dashboard({ token: _token }) {
             <div style={{ width: 32, height: 32, borderRadius: '50%', background: M.surface0, animation: 'pulse 1.5s infinite' }} />
             <div style={{ width: 100, height: 14, background: M.surface0, borderRadius: 4, animation: 'pulse 1.5s infinite' }} />
           </div>
+          <ThemeToggle M={M} />
         </header>
         <main style={{ maxWidth: '920px', margin: '0 auto', padding: '24px 16px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))', gap: '10px' }}>
-            {[1, 2, 3, 4].map(i => <SkeletonCard key={i} />)}
+            {[1, 2, 3, 4].map(i => <SkeletonCard key={i} M={M} />)}
           </div>
         </main>
       </div>
@@ -140,7 +140,8 @@ export default function Dashboard({ token: _token }) {
           </div>
           <span style={{ fontWeight: 700, fontSize: '1rem' }}>Bichim</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <ThemeToggle M={M} />
           <div style={{
             width: 30, height: 30, borderRadius: '50%', background: M.mauve,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -205,21 +206,21 @@ export default function Dashboard({ token: _token }) {
         <CreateModal
           onClose={() => setShowCreate(false)}
           onCreate={(r) => { window.location.href = `/chat/${r.id}`; }}
-          token={token}
+          token={token} M={M} I={I}
         />
       )}
       {showJoin && (
         <JoinModal
           onClose={() => setShowJoin(false)}
           onJoin={(r) => { handleEnter(r); setShowJoin(false); }}
-          token={token}
+          token={token} M={M} I={I}
         />
       )}
     </div>
   );
 }
 
-function CreateModal({ onClose, onCreate, token }) {
+function CreateModal({ onClose, onCreate, token, M, I }) {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
   const [code] = useState(genCode);
@@ -304,7 +305,7 @@ function CreateModal({ onClose, onCreate, token }) {
   );
 }
 
-function JoinModal({ onClose, onJoin, token }) {
+function JoinModal({ onClose, onJoin, token, M, I }) {
   const [code, setCode] = useState('');
   const [pw, setPw] = useState('');
   const [step, setStep] = useState(1);

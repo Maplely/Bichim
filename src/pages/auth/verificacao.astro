@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ThemeToggle from '../../components/ThemeToggle.jsx';
 const PORT = process.env.PORT || 3000;
 const API_BASE = `http://127.0.0.1:${PORT}`;
 let errorMessage = '';
@@ -57,7 +58,8 @@ if (Astro.request.method === 'POST') {
 ---
 
 <BaseLayout title="Verificar Email">
-  <main style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--base);font-family:var(--font);color:var(--text)">
+  <main style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--base);font-family:var(--font);color:var(--text);position:relative">
+    <div style="position:absolute;top:20px;right:20px"><ThemeToggle client:load /></div>
     <div style="background:var(--mantle);border:1px solid var(--borda);border-radius:18px;padding:28px;width:100%;max-width:400px">
       <h1 style="font-size:1.25rem;font-weight:700;margin-bottom:4px;color:var(--text)">Verifique seu e-mail</h1>
       <p style="font-size:0.85rem;color:var(--subtext0);margin-bottom:20px">

@@ -1,7 +1,8 @@
-import { FaComment, FaSun, FaMoon, FaTimes } from 'react-icons/fa';
+import { FaComment, FaTimes } from 'react-icons/fa';
+import ThemeToggle from '../ThemeToggle.jsx';
 import { B } from './constants.js';
 
-export default function SidebarHeader({ theme, setTheme, mobile, onClose, M }) {
+export default function SidebarHeader({ setTheme, mobile, onClose, M }) {
   return (
     <div style={{
       padding: '13px 14px', borderBottom: `1px solid ${M.surface0}`,
@@ -14,11 +15,7 @@ export default function SidebarHeader({ theme, setTheme, mobile, onClose, M }) {
         <FaComment size={13} color={M.crust} />
       </div>
       <span style={{ fontWeight: 700, fontSize: '0.88rem', flex: 1 }}>Bichim</span>
-      <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-        style={{ ...B, background: 'none', color: M.peach, padding: 8, minWidth: 36, minHeight: 36 }}
-        title="Alternar tema" aria-label="Alternar tema">
-        {theme === 'dark' ? <FaSun size={13} /> : <FaMoon size={13} />}
-      </button>
+      <ThemeToggle onToggle={(t) => setTheme(t)} M={M} />
       {mobile && (
         <button onClick={onClose} aria-label="Fechar sidebar"
           style={{ ...B, background: 'none', color: M.sub0, padding: 8, minWidth: 36, minHeight: 36 }}>

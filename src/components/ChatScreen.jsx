@@ -684,7 +684,7 @@ export default function ChatScreen({ roomId, token: _token }) {
         zIndex: mobile ? 300 : 'auto',
         transition: mobile ? 'left 0.25s cubic-bezier(0.4,0,0.2,1)' : 'none',
       }}>
-        <SidebarHeader theme={theme} setTheme={setTheme} mobile={mobile} onClose={() => setSideOpen(false)} M={M} />
+        <SidebarHeader setTheme={setTheme} mobile={mobile} onClose={() => setSideOpen(false)} M={M} />
         <div style={{ flex: 1, overflowY: 'auto', padding: '6px' }}>
           <nav aria-label="Salas">
             <SidebarRoomList
