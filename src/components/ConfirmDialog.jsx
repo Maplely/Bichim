@@ -1,4 +1,4 @@
-const M = { mantle: '#181825', surface0: '#313244', surface1: '#45475a', text: '#cdd6f4', sub0: '#a6adc8', red: '#f38ba8', mauve: '#cba6f7' };
+const M = { mantle: '#1A1A1A', surface0: '#252525', surface1: '#2D2D2D', text: '#FFFFFF', sub0: '#BFBFBF', red: '#FF6B6B', mauve: '#EA5A3E' };
 
 const B = {
   border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 600,

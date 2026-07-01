@@ -5,14 +5,14 @@ import { FaEdit, FaTrash, FaReply, FaCheckDouble, FaDownload, FaThumbtack, FaClo
 marked.setOptions({ breaks: true, gfm: true });
 
 const _M = {
-  mauve: '#FF6B4A', surface0: '#252525', surface1: '#2D2D2D',
-  crust: '#252525', sub0: '#BFBFBF', ov0: '#4A4A4A', peach: '#FFB547',
+  mauve: '#EA5A3E', surface0: '#252525', surface1: '#2D2D2D',
+  crust: '#252525', sub0: '#BFBFBF', ov0: '#636363', peach: '#FFB547',
   green: '#4ADE80', blue: '#60A5FA', yellow: '#FDB022', red: '#FF6B6B',
   pink: '#3A2420', text: '#FFFFFF',
   s0: '#252525', s1: '#2D2D2D',
 };
 
-const avatarColors = ['#74c7ec', '#f5c2e7', '#cba6f7', '#a6e3a1', '#fab387', '#89b4fa', '#f9e2af', '#f38ba8'];
+const avatarColors = ['#EA5A3E', '#C4871C', '#60A5FA', '#4ADE80', '#FDB022', '#BE8700', '#C4B5A0', '#FF8A6B'];
 
 function getColor(name) {
   let hash = 0;
@@ -158,7 +158,7 @@ export default function MsgBubble({ msg, grouped, isOwn, onReact, onEdit, onDele
           <span style={{ fontSize: '0.78rem', fontWeight: 700, color: isOwn ? M.mauve : getColor(msg.user_name) }}>
             {msg.user_name}
           </span>
-          <span style={{ fontSize: '0.67rem', color: 'var(--overlay1, #7f849c)' }}>
+          <span style={{ fontSize: '0.67rem', color: 'var(--overlay1, #3A3A3A)' }}>
             {msg.created_at ? new Date(msg.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : ''}
           </span>
         </div>

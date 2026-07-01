@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { FaCheck, FaChartBar } from 'react-icons/fa';
 
 const M = {
-  mauve: '#cba6f7', surface0: '#313244', surface1: '#45475a',
-  crust: '#11111b', text: '#cdd6f4', sub0: '#a6adc8', ov0: '#6c7086',
-  green: '#a6e3a1', blue: '#89b4fa', peach: '#fab387', red: '#f38ba8',
+  mauve: '#EA5A3E', surface0: '#252525', surface1: '#2D2D2D',
+  crust: '#252525', text: '#FFFFFF', sub0: '#BFBFBF', ov0: '#636363',
+  green: '#4ADE80', blue: '#60A5FA', peach: '#FFB547', red: '#FF6B6B',
 };
 
 export default function PollRenderer({ poll, onVote, userVoted, isClosed }) {

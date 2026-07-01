@@ -1,4 +1,4 @@
-const M = { surface0: '#313244', overlay0: '#6c7086' };
+const M = { surface0: '#252525', overlay0: '#636363' };
 
 function fmt(d) {
   const now = new Date();

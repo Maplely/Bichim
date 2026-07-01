@@ -3,7 +3,7 @@ import { FaLock, FaHashtag, FaUsers, FaClipboard, FaCheck, FaTrash } from 'react
 
 const M = {
   mantle: '#1A1A1A', surface0: '#252525', surface1: '#2D2D2D',
-  text: '#FFFFFF', sub0: '#BFBFBF', mauve: '#FF6B4A',
+  text: '#FFFFFF', sub0: '#BFBFBF', mauve: '#EA5A3E',
   green: '#4ADE80', maroon: '#FF6B6B', yellow: '#FDB022',
 };
 

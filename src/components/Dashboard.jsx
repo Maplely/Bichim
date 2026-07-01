@@ -8,8 +8,8 @@ const M = {
   base: '#0F0F0F', mantle: '#1A1A1A', crust: '#252525',
   surface0: '#252525', surface1: '#2D2D2D',
   text: '#FFFFFF', sub0: '#BFBFBF', sub1: '#808080',
-  mauve: '#FF6B4A', green: '#4ADE80', blue: '#60A5FA',
-  red: '#FF6B6B', ov0: '#4A4A4A', ov1: '#3A3A3A',
+  mauve: '#EA5A3E', green: '#4ADE80', blue: '#60A5FA',
+  red: '#FF6B6B', ov0: '#636363', ov1: '#3A3A3A',
 };
 
 const B = {
