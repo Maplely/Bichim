@@ -11,6 +11,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: true, credentials: true },
 });
+app.set('io', io);
 
 const { handler } = await import('./dist/server/entry.mjs');
 app.use(handler);

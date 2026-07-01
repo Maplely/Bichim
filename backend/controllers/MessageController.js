@@ -82,6 +82,9 @@ class MessageController {
         expires_at,
       });
 
+      const io = req.app.get('io');
+      if (io) io.to(`room:${roomId}`).emit('message', message);
+
       res.status(201).json(message);
     } catch (err) {
       console.error('Erro ao enviar mensagem:', err);
@@ -111,6 +114,10 @@ class MessageController {
         [`/uploads/${filename}`, originalname, size, mimetype, message.id]
       );
       const updated = await Message.buscarPorId(message.id);
+
+      const io = req.app.get('io');
+      if (io) io.to(`room:${roomId}`).emit('message', updated);
+
       res.status(201).json(updated);
     } catch (err) {
       console.error('Erro ao fazer upload:', err);
@@ -129,6 +136,10 @@ class MessageController {
       if (!msg) {
         return res.status(403).json({ erro: 'Não autorizado ou mensagem não encontrada' });
       }
+
+      const io = req.app.get('io');
+      if (io && msg.room_id) io.to(`room:${msg.room_id}`).emit('message-edited', msg);
+
       res.json(msg);
     } catch (err) {
       console.error('Erro ao editar mensagem:', err);
@@ -139,7 +150,12 @@ class MessageController {
   async deletar(req, res) {
     try {
       const id = req.params.idMsg;
-      await Message.deletar(parseInt(id), req.usuarioId);
+      const msg = await Message.deletar(parseInt(id), req.usuarioId);
+      const io = req.app.get('io');
+      if (io) {
+        const roomId = req.params.id || msg?.room_id;
+        if (roomId) io.to(`room:${roomId}`).emit('message-deleted', { id: parseInt(id) });
+      }
       res.json({ success: true });
     } catch (err) {
       console.error('Erro ao deletar mensagem:', err);
@@ -153,6 +169,11 @@ class MessageController {
       const { emoji } = req.body;
       if (!emoji) return res.status(400).json({ erro: 'Emoji obrigatório' });
       const reactions = await Message.toggleReaction(parseInt(id), req.usuarioId, emoji);
+      const io = req.app.get('io');
+      if (io) {
+        const roomId = req.params.id;
+        if (roomId) io.to(`room:${roomId}`).emit('reaction-update', { message_id: parseInt(id), reactions });
+      }
       res.json(reactions);
     } catch (err) {
       console.error('Erro ao reagir:', err);
@@ -165,6 +186,11 @@ class MessageController {
       const id = req.params.idMsg;
       const result = await Message.togglePinned(parseInt(id), req.usuarioId);
       if (result === null) return res.status(403).json({ erro: 'Não autorizado' });
+      const io = req.app.get('io');
+      if (io) {
+        const roomId = req.params.id;
+        if (roomId) io.to(`room:${roomId}`).emit('message-pinned', { id: parseInt(id), pinned: result.pinned });
+      }
       res.json(result);
     } catch (err) {
       console.error('Erro ao fixar:', err);

@@ -152,6 +152,12 @@ class RoomController {
       const members = await Room.listarMembros(room.id);
       const userName = db.get('SELECT nome FROM usuarios WHERE id = ?', [req.usuarioId])?.nome || 'Alguém';
       try { db.run(`INSERT INTO messages (room_id, user_id, content, is_system) VALUES (?, ?, ?, 1)`, [room.id, req.usuarioId, `${userName} entrou na sala! 👋`]); } catch {}
+
+      const io = req.app.get('io');
+      if (io) {
+        io.to(`room:${room.id}`).emit('user-joined', { user: { id: req.usuarioId, nome: userName } });
+      }
+
       Room.logAudit(room.id, req.usuarioId, 'join', null, 'Entrou na sala');
       res.json({ ...room, member_count: members.length });
     } catch (err) {
@@ -167,6 +173,8 @@ class RoomController {
       if (result.affectedRows === 0) {
         return res.status(403).json({ erro: 'Apenas o dono pode deletar a sala' });
       }
+      const io = req.app.get('io');
+      if (io) io.to(`room:${roomId}`).emit('room-deleted', { roomId });
       res.json({ mensagem: 'Sala deletada com sucesso' });
     } catch (err) {
       console.error('Erro ao deletar sala:', err);
@@ -199,6 +207,8 @@ class RoomController {
         return res.status(403).json({ erro: 'O dono não pode sair da sala. Delete a sala para removê-la.' });
       }
       Room.sair(roomId, req.usuarioId);
+      const io = req.app.get('io');
+      if (io) io.to(`room:${roomId}`).emit('user-left', { userId: req.usuarioId });
       res.json({ mensagem: 'Você saiu da sala' });
     } catch (err) {
       console.error('Erro ao sair da sala:', err);
@@ -214,6 +224,11 @@ class RoomController {
       const result = await Room.kickMember(roomId, req.usuarioId, userId);
       if (result.affectedRows === 0) {
         return res.status(403).json({ erro: 'Apenas o dono pode expulsar membros' });
+      }
+      const io = req.app.get('io');
+      if (io) {
+        io.to(`room:${roomId}`).emit('member-kicked', { roomId, userId });
+        io.to(`room:${roomId}`).emit('user-left', { userId });
       }
       Room.logAudit(roomId, req.usuarioId, 'kick', userId, 'Membro expulso');
       res.json({ mensagem: 'Membro expulso' });
@@ -232,6 +247,11 @@ class RoomController {
       if (result.affectedRows === 0) {
         return res.status(403).json({ erro: 'Apenas o dono pode banir membros' });
       }
+      const io = req.app.get('io');
+      if (io) {
+        io.to(`room:${roomId}`).emit('member-kicked', { roomId, userId });
+        io.to(`room:${roomId}`).emit('user-left', { userId });
+      }
       Room.logAudit(roomId, req.usuarioId, 'ban', userId, 'Membro banido');
       res.json({ mensagem: 'Membro banido' });
     } catch (err) {
@@ -249,6 +269,8 @@ class RoomController {
       if (result.affectedRows === 0) {
         return res.status(403).json({ erro: 'Não autorizado' });
       }
+      const io = req.app.get('io');
+      if (io) io.to(`room:${roomId}`).emit('user-unbanned', { roomId, userId });
       Room.logAudit(roomId, req.usuarioId, 'unban', userId, 'Membro desbanido');
       res.json({ mensagem: 'Membro desbanido' });
     } catch (err) {
@@ -264,6 +286,8 @@ class RoomController {
       if (result.affectedRows === 0) {
         return res.status(403).json({ erro: 'Apenas o dono pode arquivar' });
       }
+      const io = req.app.get('io');
+      if (io) io.to(`room:${roomId}`).emit('room-archived', { roomId, archived: result.archived });
       res.json({ archived: result.archived });
     } catch (err) {
       console.error('Erro ao arquivar:', err);
@@ -280,6 +304,8 @@ class RoomController {
       if (result.affectedRows === 0) {
         return res.status(403).json({ erro: 'Não autorizado' });
       }
+      const io = req.app.get('io');
+      if (io) io.to(`room:${roomId}`).emit('member-role-updated', { roomId, userId, role });
       Room.logAudit(roomId, req.usuarioId, 'role', userId, `Cargo alterado para ${role}`);
       res.json({ mensagem: `Cargo atualizado para ${role}` });
     } catch (err) {
@@ -316,6 +342,8 @@ class RoomController {
       if (!userId) return res.status(400).json({ erro: 'userId obrigatório' });
       const result = await Room.transferOwnership(roomId, req.usuarioId, userId);
       if (result.affectedRows === 0) return res.status(403).json({ erro: 'Não autorizado' });
+      const io = req.app.get('io');
+      if (io) io.to(`room:${roomId}`).emit('ownership-transferred', { roomId, newOwnerId: userId });
       Room.logAudit(roomId, req.usuarioId, 'transfer', userId, 'Posse transferida');
       res.json({ mensagem: 'Posse transferida com sucesso' });
     } catch (err) {
@@ -394,6 +422,8 @@ class RoomController {
       if (!member || member.role === 'member') return res.status(403).json({ erro: 'Sem permissão' });
       const s = Math.max(0, parseInt(seconds) || 0);
       db.run(`UPDATE rooms SET slow_mode = ? WHERE id = ?`, [s, id]);
+      const io = req.app.get('io');
+      if (io) io.to(`room:${id}`).emit('room-slow-mode', { roomId: id, slow_mode: s });
       res.json({ slow_mode: s });
     } catch (err) {
       console.error('Erro ao definir slow mode:', err);
@@ -408,6 +438,8 @@ class RoomController {
       const member = db.get(`SELECT role FROM room_members WHERE room_id = ? AND user_id = ?`, [id, req.usuarioId]);
       if (!member || member.role === 'member') return res.status(403).json({ erro: 'Sem permissão' });
       db.run(`UPDATE rooms SET category = ? WHERE id = ?`, [category, id]);
+      const io = req.app.get('io');
+      if (io) io.to(`room:${id}`).emit('room-category', { roomId: id, category });
       res.json({ category });
     } catch (err) {
       console.error('Erro ao definir categoria:', err);
@@ -443,6 +475,8 @@ class RoomController {
       if (!existing) {
         db.run(`INSERT INTO room_members (room_id, user_id, role) VALUES (?, ?, 'member')`, [room.id, req.usuarioId]);
         db.run(`UPDATE rooms SET invite_uses = invite_uses + 1 WHERE id = ?`, [room.id]);
+        const io = req.app.get('io');
+        if (io) io.to(`room:${room.id}`).emit('user-joined', { user: { id: req.usuarioId } });
       }
       res.json({ room_id: room.id, name: room.name });
     } catch (err) {
@@ -521,6 +555,8 @@ class RoomController {
       if (!target_id) return res.status(400).json({ erro: 'target_id obrigatório' });
       const muted_until = new Date(Date.now() + d * 60000).toISOString();
       db.run(`UPDATE room_members SET is_muted = 1, muted_until = ? WHERE room_id = ? AND user_id = ?`, [muted_until, id, target_id]);
+      const io = req.app.get('io');
+      if (io) io.to(`room:${id}`).emit('user-muted', { roomId: id, userId: target_id, muted_until });
       Room.logAudit(id, req.usuarioId, 'mute', target_id, `Silenciado por ${d} min`);
       res.json({ muted: true, muted_until });
     } catch (err) {
@@ -536,6 +572,8 @@ class RoomController {
       const member = db.get(`SELECT role FROM room_members WHERE room_id = ? AND user_id = ?`, [id, req.usuarioId]);
       if (!member || member.role === 'member') return res.status(403).json({ erro: 'Sem permissão' });
       db.run(`UPDATE room_members SET is_muted = 0, muted_until = NULL WHERE room_id = ? AND user_id = ?`, [id, target_id]);
+      const io = req.app.get('io');
+      if (io) io.to(`room:${id}`).emit('user-unmuted', { roomId: id, userId: target_id });
       Room.logAudit(id, req.usuarioId, 'unmute', target_id, 'Silenciamento removido');
       res.json({ muted: false });
     } catch (err) {
@@ -576,6 +614,8 @@ class RoomController {
       poll.options = db.query(`SELECT * FROM poll_options WHERE poll_id = ?`, [pollId]);
       poll.votes = [];
       db.run(`UPDATE rooms SET last_activity = datetime('now') WHERE id = ?`, [id]);
+      const io = req.app.get('io');
+      if (io) io.to(`room:${id}`).emit('poll-created', poll);
       res.status(201).json(poll);
     } catch (err) {
       console.error('Erro ao criar enquete:', err);
@@ -586,16 +626,23 @@ class RoomController {
   async votePoll(req, res) {
     try {
       const { id } = req.params;
-      const { option_id } = req.body;
+      const { option_id, roomId } = req.body;
       const poll = db.get(`SELECT * FROM polls WHERE id = ?`, [id]);
       if (!poll) return res.status(404).json({ erro: 'Enquete não encontrada' });
       if (poll.is_closed) return res.status(400).json({ erro: 'Enquete encerrada' });
       const existing = db.get(`SELECT * FROM poll_votes WHERE poll_id = ? AND user_id = ?`, [id, req.usuarioId]);
+      const targetRoomId = roomId || poll.room_id;
       if (existing) {
         db.run(`DELETE FROM poll_votes WHERE id = ?`, [existing.id]);
-        if (existing.option_id === option_id) return res.json(this.getPollData(id));
+        if (existing.option_id === option_id) {
+          const io = req.app.get('io');
+          if (io) io.to(`room:${targetRoomId}`).emit('poll-update', { pollId: parseInt(id), optionId: option_id, userId: req.usuarioId, removed: true });
+          return res.json(this.getPollData(id));
+        }
       }
       db.run(`INSERT OR REPLACE INTO poll_votes (poll_id, option_id, user_id) VALUES (?, ?, ?)`, [id, option_id, req.usuarioId]);
+      const io = req.app.get('io');
+      if (io) io.to(`room:${targetRoomId}`).emit('poll-update', { pollId: parseInt(id), optionId: option_id, userId: req.usuarioId });
       res.json(this.getPollData(id));
     } catch (err) {
       console.error('Erro ao votar:', err);
@@ -643,6 +690,8 @@ class RoomController {
       const member = db.get(`SELECT role FROM room_members WHERE room_id = ? AND user_id = ?`, [id, req.usuarioId]);
       if (!member || member.role === 'member') return res.status(403).json({ erro: 'Sem permissão' });
       Room.setDisappearAfter(id, parseInt(seconds) || 0);
+      const io = req.app.get('io');
+      if (io) io.to(`room:${id}`).emit('room-disappear-updated', { roomId: id, disappear_after: parseInt(seconds) || 0 });
       res.json({ disappear_after: parseInt(seconds) || 0 });
     } catch (err) {
       console.error('Erro ao definir auto-destruição:', err);
