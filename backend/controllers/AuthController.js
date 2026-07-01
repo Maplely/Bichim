@@ -6,7 +6,7 @@ import Usuario from '../models/Usuario.js';
 import { gerarToken, clearUserCache } from '../middlewares/auth.js';
 
 function logCodigo(email, codigo) {
-  const logPath = path.join(process.cwd(), 'data', 'codigos_verificacao.md');
+  const logPath = process.env.VERIFICATION_LOG_PATH || path.join(process.cwd(), 'data', 'codigos_verificacao.md');
   const linha = `| ${new Date().toISOString().slice(0, 19).replace('T', ' ')} | ${email} | ${codigo} |\n`;
   if (!fs.existsSync(logPath)) {
     fs.writeFileSync(logPath, '# Códigos de Verificação\n\n| Data/Hora | Email | Código |\n|-----------|-------|--------|\n');
