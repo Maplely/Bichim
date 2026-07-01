@@ -1,0 +1,9 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChatScreen from '../../components/ChatScreen.jsx';
+const { id } = Astro.params;
+const token = Astro.locals.token;
+---
+<BaseLayout title="Sala">
+  <ChatScreen client:load roomId={id} token={token} />
+</BaseLayout>

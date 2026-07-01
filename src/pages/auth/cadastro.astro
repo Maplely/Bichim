@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const PORT = process.env.PORT || 3000;
+const API_BASE = `http://127.0.0.1:${PORT}`;
+let errorMessage = '';
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const nome = formData.get('nome')?.toString().trim() || '';
+    const email = formData.get('email')?.toString().toLowerCase().trim() || '';
+    const senha = formData.get('senha')?.toString() || '';
+
+    if (!nome || !email || !senha) {
+      errorMessage = 'Preencha todos os campos.';
+    } else if (senha.length < 6) {
+      errorMessage = 'Senha deve ter no mínimo 6 caracteres.';
+    } else {
+      const response = await fetch(`${API_BASE}/api/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, email, senha }),
+      });
+
+      if (response.ok) {
+        return Astro.redirect(`/auth/verificacao?email=${encodeURIComponent(email)}`);
+      } else {
+        const err = await response.json();
+        errorMessage = err.erro || 'Não foi possível criar a conta.';
+      }
+    }
+  } catch (error) {
+    console.error('[Cadastro Error]', error);
+    errorMessage = 'Erro interno. Tente novamente.';
+  }
+}
+---
+
+<BaseLayout title="Cadastro">
+  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--base);font-family:var(--font);color:var(--text)">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="width:58px;height:58px;border-radius:18px;background:var(--mauve);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 32px var(--mauve)">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--crust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <h1 style="margin:0 0 6px;font-size:1.65rem;font-weight:800;letter-spacing:-0.02em">Chat Local</h1>
+      <p style="margin:0;color:var(--subtext0);font-size:0.85rem">Criar nova conta</p>
+    </div>
+
+    <div style="background:var(--mantle);border:1px solid var(--surface0);border-radius:18px;padding:28px;width:100%;max-width:380px">
+      <form method="POST" id="cadastroForm">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Nome</div>
+            <input type="text" name="nome" required autocomplete="name" placeholder="Seu nome" id="nomeInput"
+              style="background:var(--base);border:1px solid var(--surface0);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
+          </div>
+          <div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Email</div>
+            <input type="email" name="email" required autocomplete="email" placeholder="seu@email.com" id="emailInput"
+              style="background:var(--base);border:1px solid var(--surface0);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
+          </div>
+          <div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Senha</div>
+            <input type="password" name="senha" required autocomplete="new-password" placeholder="Mínimo 6 caracteres" id="senhaInput"
+              style="background:var(--base);border:1px solid var(--surface0);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
+          </div>
+
+          <p id="cadastroError" style="margin:0;color:var(--red);font-size:0.8rem">{errorMessage}</p>
+
+          <button type="submit" id="cadastroBtn"
+            style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:4px;padding:13px;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-family:inherit;transition:all 0.15s;background:var(--mauve);color:var(--crust);font-size:0.9rem">
+            Criar conta
+          </button>
+
+          <p style="text-align:center;font-size:0.85rem;color:var(--overlay1);margin-top:8px">
+            Já tem conta? <a href="/auth/login" style="color:var(--mauve);font-weight:600">Fazer login</a>
+          </p>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      const form = document.getElementById('cadastroForm');
+      const nomeInput = document.getElementById('nomeInput');
+      const emailInput = document.getElementById('emailInput');
+      const senhaInput = document.getElementById('senhaInput');
+      const errorEl = document.getElementById('cadastroError');
+      form.addEventListener('submit', function(e) {
+        const errors = [];
+        if (!nomeInput.value.trim()) errors.push('Nome é obrigatório.');
+        if (!emailInput.value.trim()) errors.push('Email é obrigatório.');
+        if (!senhaInput.value) errors.push('Senha é obrigatória.');
+        else if (senhaInput.value.length < 6) errors.push('Senha deve ter no mínimo 6 caracteres.');
+        if (errors.length > 0) {
+          e.preventDefault();
+          errorEl.textContent = errors.join(' ');
+        }
+      });
+      [nomeInput, emailInput, senhaInput].forEach(el => {
+        el.addEventListener('input', () => { if (errorEl.textContent) errorEl.textContent = ''; });
+      });
+    </script>
+  </div>
+</BaseLayout>

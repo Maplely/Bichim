@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const PORT = process.env.PORT || 3000;
+const API_BASE = `http://127.0.0.1:${PORT}`;
+let errorMessage = '';
+let successMessage = '';
+let verificado = false;
+
+const email = Astro.url.searchParams.get('email') ?? '';
+if (!email) return Astro.redirect('/auth/login');
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const action = formData.get('_action')?.toString();
+    const codigo = formData.get('codigo')?.toString().trim() ?? '';
+
+    if (action === 'reenviar') {
+      const response = await fetch(`${API_BASE}/api/auth/reenviar-codigo`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (response.ok) {
+        errorMessage = '';
+        successMessage = 'Novo código enviado para seu e-mail.';
+      } else {
+        successMessage = '';
+        errorMessage = 'Erro ao reenviar código. Tente novamente.';
+      }
+    } else if (!codigo || codigo.length !== 6 || !/^\d{6}$/.test(codigo)) {
+      successMessage = '';
+      errorMessage = 'Digite um código válido de 6 dígitos.';
+    } else {
+      const response = await fetch(`${API_BASE}/api/auth/verificar-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, codigo }),
+      });
+
+      if (response.ok) {
+        verificado = true;
+        errorMessage = '';
+        successMessage = 'E-mail verificado com sucesso!';
+      } else {
+        successMessage = '';
+        const err = await response.json();
+        errorMessage = err.erro || 'Código inválido ou expirado.';
+      }
+    }
+  } catch (error) {
+    console.error('[Verificacao Error]', error);
+    successMessage = '';
+    errorMessage = 'Erro interno. Tente novamente.';
+  }
+}
+---
+
+<BaseLayout title="Verificar Email">
+  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--base);font-family:var(--font);color:var(--text)">
+    <div style="background:var(--mantle);border:1px solid var(--surface0);border-radius:18px;padding:28px;width:100%;max-width:400px">
+      <h1 style="font-size:1.25rem;font-weight:700;margin-bottom:4px;color:var(--text)">Verifique seu e-mail</h1>
+      <p style="font-size:0.85rem;color:var(--subtext0);margin-bottom:20px">
+        Enviamos um código de 6 dígitos para<br /><strong>{email}</strong>
+      </p>
+
+      {verificado ? (
+        <div style="text-align:center;padding:16px 0">
+          <div style="width:48px;height:48px;border-radius:50%;background:var(--green);color:var(--crust);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;margin:0 auto 16px">✓</div>
+          <p style="color:var(--green);margin-bottom:16px">{successMessage}</p>
+          <a href="/auth/login" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:13px;border:none;border-radius:8px;cursor:pointer;font-weight:700;background:var(--mauve);color:var(--crust);font-size:0.9rem;text-decoration:none">Ir para o login</a>
+        </div>
+      ) : (
+        <form method="POST" style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Código de verificação</div>
+            <input type="text" name="codigo" inputmode="numeric" maxlength="6" required placeholder="000000"
+              style="background:var(--base);border:1px solid var(--surface0);border-radius:8px;color:var(--text);font-family:inherit;font-size:1.5rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box;text-align:center;letter-spacing:0.5rem;font-weight:700" />
+          </div>
+
+          {errorMessage && <p style="margin:0;color:var(--red);font-size:0.8rem">{errorMessage}</p>}
+          {successMessage && <p style="margin:0;color:var(--green);font-size:0.8rem">{successMessage}</p>}
+
+          <button type="submit"
+            style="display:flex;align-items:center;justify-content:center;gap:6px;padding:13px;border:none;border-radius:8px;cursor:pointer;font-weight:700;background:var(--mauve);color:var(--crust);font-size:0.9rem;width:100%">
+            Verificar código
+          </button>
+
+          <p style="text-align:center;font-size:0.82rem;color:var(--overlay1)">
+            Não recebeu?{' '}
+            <button type="submit" name="_action" value="reenviar"
+              style="background:none;border:none;color:var(--mauve);font-weight:600;cursor:pointer;font-size:0.82rem;padding:0;text-decoration:underline;font-family:inherit">
+              Reenviar código
+            </button>
+          </p>
+        </form>
+      )}
+
+      <p style="text-align:center;font-size:0.82rem;color:var(--overlay1);margin-top:12px">
+        <a href="/auth/login" style="color:var(--mauve)">← Voltar ao login</a>
+      </p>
+    </div>
+  </div>
+</BaseLayout>

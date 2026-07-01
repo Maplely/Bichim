@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Dashboard from '../../components/Dashboard.jsx';
+const token = Astro.locals.token;
+---
+<BaseLayout title="Chat">
+  <Dashboard client:load token={token} />
+</BaseLayout>

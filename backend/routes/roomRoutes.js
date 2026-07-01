@@ -1,0 +1,44 @@
+import { Router } from 'express';
+import RoomController from '../controllers/RoomController.js';
+import { verificarToken } from '../middlewares/auth.js';
+
+const router = Router();
+
+router.get('/rooms', verificarToken, RoomController.listar);
+router.post('/rooms', verificarToken, RoomController.criar);
+router.post('/rooms/join', verificarToken, RoomController.entrar);
+router.get('/rooms/:id', verificarToken, RoomController.buscar);
+router.delete('/rooms/:id', verificarToken, RoomController.deletar);
+router.post('/rooms/:id/leave', verificarToken, RoomController.sair);
+router.get('/rooms/:id/members', verificarToken, RoomController.membros);
+router.post('/rooms/:id/kick', verificarToken, RoomController.kick);
+router.post('/rooms/:id/ban', verificarToken, RoomController.ban);
+router.post('/rooms/:id/unban', verificarToken, RoomController.unban);
+router.post('/rooms/:id/archive', verificarToken, RoomController.arquivar);
+router.put('/rooms/:id/role', verificarToken, RoomController.atualizarRole);
+router.get('/rooms/:id/search', verificarToken, RoomController.searchMessages);
+router.post('/rooms/:id/transfer', verificarToken, RoomController.transferir);
+router.get('/rooms/:id/audit', verificarToken, RoomController.auditLog);
+router.get('/rooms/dm/:targetUserId', verificarToken, RoomController.encontrarDM);
+router.get('/users/:userId', verificarToken, RoomController.profilo);
+router.put('/users/me/profile', verificarToken, RoomController.updateProfile);
+router.post('/rooms/:id/favorite', verificarToken, RoomController.toggleFavorite);
+router.post('/rooms/:id/slowmode', verificarToken, RoomController.setSlowMode);
+router.post('/rooms/:id/category', verificarToken, RoomController.setCategory);
+router.post('/rooms/:id/invite', verificarToken, RoomController.createInvite);
+router.get('/invite/:code', verificarToken, RoomController.joinByInvite);
+router.post('/users/block', verificarToken, RoomController.blockUser);
+router.post('/messages/report', verificarToken, RoomController.reportMessage);
+router.post('/users/contact', verificarToken, RoomController.toggleContact);
+router.get('/users/contacts', verificarToken, RoomController.listContacts);
+router.post('/rooms/:id/mute', verificarToken, RoomController.muteUser);
+router.post('/rooms/:id/unmute', verificarToken, RoomController.unmuteUser);
+router.post('/users/verify', verificarToken, RoomController.setVerification);
+router.post('/rooms/:id/polls', verificarToken, RoomController.createPoll);
+router.post('/polls/:id/vote', verificarToken, RoomController.votePoll);
+router.get('/polls/:id', verificarToken, RoomController.getPoll);
+router.post('/rooms/:id/schedule', verificarToken, RoomController.scheduleMessage);
+router.post('/rooms/:id/disappear', verificarToken, RoomController.setDisappear);
+router.post('/translate', verificarToken, RoomController.translateMessage);
+
+export default router;

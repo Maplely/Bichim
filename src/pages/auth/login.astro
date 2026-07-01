@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { setSessionToken } from '../../lib/auth/sessao';
+const PORT = process.env.PORT || 3000;
+const API_BASE = `http://127.0.0.1:${PORT}`;
+const erroParam = Astro.url.searchParams.get('erro');
+let errorMessage = erroParam === 'nao_autorizado' ? 'Sua sessão expirou. Faça login novamente.' : '';
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const email = formData.get('email')?.toString().toLowerCase().trim() || '';
+    const senha = formData.get('senha')?.toString() || '';
+
+    if (!email || !senha) {
+      errorMessage = 'Email e senha são obrigatórios.';
+    } else {
+      const response = await fetch(`${API_BASE}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSessionToken(Astro.cookies, data.token);
+        return Astro.redirect('/chat');
+      } else {
+        const err = await response.json();
+        errorMessage = err.erro || 'Credenciais inválidas.';
+      }
+    }
+  } catch (error) {
+    console.error('[Login Error]', error);
+    errorMessage = 'Erro interno. Tente novamente.';
+  }
+}
+---
+
+<BaseLayout title="Login">
+  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--base);font-family:var(--font);color:var(--text)">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="width:58px;height:58px;border-radius:18px;background:var(--mauve);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 32px var(--mauve)">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--crust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <h1 style="margin:0 0 6px;font-size:1.65rem;font-weight:800;letter-spacing:-0.02em">Chat Local</h1>
+      <p style="margin:0;color:var(--subtext0);font-size:0.85rem">Seu servidor. Seus dados. Seu controle.</p>
+    </div>
+
+    <div style="background:var(--mantle);border:1px solid var(--surface0);border-radius:18px;padding:28px;width:100%;max-width:380px">
+      <form method="POST" id="loginForm">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Email</div>
+            <input type="email" name="email" required autocomplete="email" placeholder="seu@email.com"
+              id="emailInput"
+              style="background:var(--base);border:1px solid var(--surface0);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
+          </div>
+          <div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Senha</div>
+            <input type="password" name="senha" required autocomplete="current-password" placeholder="••••••••"
+              id="senhaInput"
+              style="background:var(--base);border:1px solid var(--surface0);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
+          </div>
+
+          <p id="loginError" style="margin:0;color:var(--red);font-size:0.8rem">{errorMessage}</p>
+
+          <button type="submit" id="loginBtn"
+            style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:4px;padding:13px;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-family:inherit;transition:all 0.15s;background:var(--mauve);color:var(--crust);font-size:0.9rem">
+            Entrar
+          </button>
+
+          <p style="text-align:center;font-size:0.85rem;color:var(--overlay1);margin-top:8px">
+            Não tem conta? <a href="/auth/cadastro" style="color:var(--mauve);font-weight:600">Cadastre-se</a>
+          </p>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      const form = document.getElementById('loginForm');
+      const emailInput = document.getElementById('emailInput');
+      const senhaInput = document.getElementById('senhaInput');
+      const errorEl = document.getElementById('loginError');
+      form.addEventListener('submit', function(e) {
+        const errors = [];
+        if (!emailInput.value.trim()) errors.push('Email é obrigatório.');
+        if (!senhaInput.value) errors.push('Senha é obrigatória.');
+        if (errors.length > 0) {
+          e.preventDefault();
+          errorEl.textContent = errors.join(' ');
+          errorEl.style.display = 'block';
+        }
+      });
+      emailInput.addEventListener('input', () => { if (errorEl.style.display !== 'none') errorEl.style.display = 'none'; });
+      senhaInput.addEventListener('input', () => { if (errorEl.style.display !== 'none') errorEl.style.display = 'none'; });
+    </script>
+  </div>
+</BaseLayout>
