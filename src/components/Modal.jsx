@@ -1,6 +1,6 @@
 import { FaTimes } from 'react-icons/fa';
 
-const M = { mantle: '#181825', surface0: '#313244', text: '#cdd6f4', sub0: '#a6adc8' };
+const M = { mantle: '#1A1A1A', surface0: '#252525', text: '#FFFFFF', sub0: '#BFBFBF' };
 
 const B = {
   border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 600,

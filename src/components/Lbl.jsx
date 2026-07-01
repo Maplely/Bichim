@@ -1,5 +1,5 @@
 const M = {
-  sub1: '#bac2de',
+  sub1: '#808080',
 };
 
 export default function Lbl({ children }) {

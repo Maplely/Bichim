@@ -5,11 +5,11 @@ import Modal from './Modal.jsx';
 import Lbl from './Lbl.jsx';
 
 const M = {
-  base: '#1e1e2e', mantle: '#181825', crust: '#11111b',
-  surface0: '#313244', surface1: '#45475a',
-  text: '#cdd6f4', sub0: '#a6adc8', sub1: '#bac2de',
-  mauve: '#cba6f7', green: '#a6e3a1', blue: '#89b4fa',
-  red: '#f38ba8', ov0: '#6c7086', ov1: '#7f849c',
+  base: '#0F0F0F', mantle: '#1A1A1A', crust: '#252525',
+  surface0: '#252525', surface1: '#2D2D2D',
+  text: '#FFFFFF', sub0: '#BFBFBF', sub1: '#808080',
+  mauve: '#FF6B4A', green: '#4ADE80', blue: '#60A5FA',
+  red: '#FF6B6B', ov0: '#4A4A4A', ov1: '#3A3A3A',
 };
 
 const B = {

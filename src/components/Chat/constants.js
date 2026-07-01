@@ -1,19 +1,23 @@
 export const light = {
-  base: '#eff1f5', mantle: '#e6e9ef', crust: '#dce0e8',
-  surface0: '#ccd0da', surface1: '#bcc0cc', surface2: '#acb0be',
-  text: '#4c4f69', sub0: '#6c6f85', sub1: '#5c5f77', ov0: '#9ca0b0',
-  ov1: '#8c8fa1', ov2: '#7c7f93',
-  mauve: '#8839ef', green: '#40a02b', yellow: '#df8e1d', blue: '#1e66f5',
-  red: '#d20f39', pink: '#ea76cb', peach: '#fe640b',
+  base: '#FFFFFF', mantle: '#F9F7F4', crust: '#F0EDE8',
+  surface0: '#F0EDE8', surface1: '#FDFBF8', surface2: '#EDE9E0',
+  text: '#1A1A1A', sub0: '#5A5A5A', sub1: '#8A8A8A', ov0: '#BFBFBF',
+  ov1: '#E0D7CC', ov2: '#EDE9E0',
+  mauve: '#D64A38', green: '#22C55E', yellow: '#F59E0B', blue: '#3B82F6',
+  red: '#EF4444', pink: '#FFE8E0', peach: '#F5A623',
+  chatSent: '#FFE8E0', chatReceived: '#F0EDE8',
+  accent: '#E8A200', tertiary: '#8B6F47',
 };
 
 export const dark = {
-  base: '#1e1e2e', mantle: '#181825', crust: '#11111b',
-  surface0: '#313244', surface1: '#45475a', surface2: '#585b70',
-  text: '#cdd6f4', sub0: '#a6adc8', sub1: '#bac2de', ov0: '#6c7086',
-  ov1: '#7f849c', ov2: '#9399b2',
-  mauve: '#cba6f7', green: '#a6e3a1', yellow: '#f9e2af', blue: '#89b4fa',
-  red: '#f38ba8', pink: '#f5c2e7', peach: '#fab387',
+  base: '#0F0F0F', mantle: '#1A1A1A', crust: '#252525',
+  surface0: '#252525', surface1: '#2D2D2D', surface2: '#3A3A3A',
+  text: '#FFFFFF', sub0: '#BFBFBF', sub1: '#808080', ov0: '#4A4A4A',
+  ov1: '#3A3A3A', ov2: '#2A2A2A',
+  mauve: '#FF6B4A', green: '#4ADE80', yellow: '#FDB022', blue: '#60A5FA',
+  red: '#FF6B6B', pink: '#3A2420', peach: '#FFB547',
+  chatSent: '#3A2420', chatReceived: '#2A2A2A',
+  accent: '#FFD700', tertiary: '#C4B5A0',
 };
 
 export const B = {
@@ -22,7 +26,7 @@ export const B = {
   alignItems: 'center', justifyContent: 'center', gap: '6px',
 };
 
-const avatarColors = ['#74c7ec', '#f5c2e7', '#cba6f7', '#a6e3a1', '#fab387', '#89b4fa', '#f9e2af', '#f38ba8'];
+const avatarColors = ['#FF6B4A', '#F5A623', '#60A5FA', '#4ADE80', '#FDB022', '#FFD700', '#C4B5A0', '#FF8A6B'];
 export function getColor(name) {
   let hash = 0;
   for (let i = 0; i < (name || '').length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);

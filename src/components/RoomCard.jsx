@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { FaLock, FaHashtag, FaUsers, FaClipboard, FaCheck, FaTrash } from 'react-icons/fa';
 
 const M = {
-  mantle: '#181825', surface0: '#313244', surface1: '#45475a',
-  text: '#cdd6f4', sub0: '#a6adc8', mauve: '#cba6f7',
-  green: '#a6e3a1', maroon: '#eba0ac', yellow: '#f9e2af',
+  mantle: '#1A1A1A', surface0: '#252525', surface1: '#2D2D2D',
+  text: '#FFFFFF', sub0: '#BFBFBF', mauve: '#FF6B4A',
+  green: '#4ADE80', maroon: '#FF6B6B', yellow: '#FDB022',
 };
 
 const B = {

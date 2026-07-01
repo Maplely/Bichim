@@ -20,7 +20,7 @@ export default function MessageList({
         <EmptyMessages M={M} />
       ) : (
         msgs.map((msg, i) => {
-          if (msg.__system || msg.is_system) return <MsgBubble key={msg.id} msg={{ ...msg, __system: true }} grouped={false} isOwn={false} />;
+          if (msg.__system || msg.is_system) return <MsgBubble key={msg.id} msg={{ ...msg, __system: true }} grouped={false} isOwn={false} M={M} />;
           const showUnreadDivider = lastReadId && msg.id === lastReadId && i < msgs.length - 1;
           return (
             <div key={msg.id}>
@@ -33,7 +33,7 @@ export default function MessageList({
                   </button>
                 )}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <MsgBubble msg={msg}
+                  <MsgBubble msg={msg} M={M}
                     grouped={i > 0 && !msgs[i - 1].__system && msgs[i - 1].user_id === msg.user_id && !shouldShowDateSep(msgs, i)}
                     isOwn={user && msg.user_id === user.id}
                     onReact={onReact}

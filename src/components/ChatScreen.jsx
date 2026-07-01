@@ -44,7 +44,7 @@ export default function ChatScreen({ roomId, token: _token }) {
   const [theme, setThemeState] = useState(getTheme);
   const M = theme === 'light' ? light : dark;
 
-  const setTheme = (t) => { setThemeState(t); try { localStorage.setItem('chat-theme', t); } catch {} };
+  const setTheme = (t) => { setThemeState(t); try { localStorage.setItem('chat-theme', t); document.documentElement.dataset.theme = t; } catch {} };
 
   const token = _token || getToken();
   const [user, setUser] = useState(null);

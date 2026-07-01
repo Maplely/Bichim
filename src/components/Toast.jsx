@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { FaCheckCircle, FaExclamationCircle, FaInfoCircle, FaTimes } from 'react-icons/fa';
 
-const M = { green: '#a6e3a1', red: '#f38ba8', blue: '#89b4fa', surface0: '#313244', text: '#cdd6f4', sub0: '#a6adc8' };
+const M = { green: '#4ADE80', red: '#FF6B6B', blue: '#60A5FA', surface0: '#252525', text: '#FFFFFF', sub0: '#BFBFBF' };
 
 let addToastFn = null;
 

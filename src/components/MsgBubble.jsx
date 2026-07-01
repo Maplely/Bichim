@@ -4,11 +4,12 @@ import { FaEdit, FaTrash, FaReply, FaCheckDouble, FaDownload, FaThumbtack, FaClo
 
 marked.setOptions({ breaks: true, gfm: true });
 
-const M = {
-  mauve: '#cba6f7', surface0: '#313244', surface1: '#45475a',
-  crust: '#11111b', s0: '#313244', s1: '#45475a',
-  sub0: '#a6adc8', ov0: '#6c7086', peach: '#fab387', green: '#a6e3a1',
-  blue: '#89b4fa', yellow: '#f9e2af', red: '#f38ba8', pink: '#f5c2e7',
+const _M = {
+  mauve: '#FF6B4A', surface0: '#252525', surface1: '#2D2D2D',
+  crust: '#252525', sub0: '#BFBFBF', ov0: '#4A4A4A', peach: '#FFB547',
+  green: '#4ADE80', blue: '#60A5FA', yellow: '#FDB022', red: '#FF6B6B',
+  pink: '#3A2420', text: '#FFFFFF',
+  s0: '#252525', s1: '#2D2D2D',
 };
 
 const avatarColors = ['#74c7ec', '#f5c2e7', '#cba6f7', '#a6e3a1', '#fab387', '#89b4fa', '#f9e2af', '#f38ba8'];
@@ -123,7 +124,8 @@ function LinkPreview({ preview, onImageClick }) {
   );
 }
 
-export default function MsgBubble({ msg, grouped, isOwn, onReact, onEdit, onDelete, onReply, onPin, onImageClick, onTranslate, preview }) {
+export default function MsgBubble({ msg, grouped, isOwn, onReact, onEdit, onDelete, onReply, onPin, onImageClick, onTranslate, preview, M: MProp }) {
+  const M = MProp || _M;
   const [hover, setHover] = useState(false);
   const [translated, setTranslated] = useState(null);
   const isTouch = useRef(typeof window !== 'undefined' && 'ontouchstart' in window);
