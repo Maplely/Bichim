@@ -2,10 +2,10 @@ const M = {
   sub1: '#808080',
 };
 
-export default function Lbl({ children }) {
+export default function Lbl({ children, htmlFor }) {
   return (
-    <div style={{ fontSize: '0.78rem', fontWeight: 600, color: M.sub1, marginBottom: '6px' }}>
+    <label htmlFor={htmlFor} style={{ fontSize: '0.78rem', fontWeight: 600, color: M.sub1, marginBottom: '6px', display: 'block' }}>
       {children}
-    </div>
+    </label>
   );
 }

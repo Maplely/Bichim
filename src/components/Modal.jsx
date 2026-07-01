@@ -10,7 +10,7 @@ const B = {
 
 export default function Modal({ title, onClose, children }) {
   return (
-    <div
+    <div role="dialog" aria-modal="true" aria-label={title}
       onClick={e => e.target === e.currentTarget && onClose()}
       style={{
         position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.72)', display: 'flex',
@@ -23,7 +23,7 @@ export default function Modal({ title, onClose, children }) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
           <h2 style={{ margin: 0, color: M.text, fontSize: '1.05rem', fontWeight: 700 }}>{title}</h2>
-          <button onClick={onClose} style={{ ...B, background: 'none', color: M.sub0, padding: '4px' }}><FaTimes size={14} /></button>
+          <button onClick={onClose} aria-label="Fechar" style={{ ...B, background: 'none', color: M.sub0, padding: '4px' }}><FaTimes size={14} /></button>
         </div>
         {children}
       </div>

@@ -80,7 +80,7 @@ export default function RoomCard({ room, onEnter, onDelete }) {
           <button
             onClick={e => { e.stopPropagation(); onDelete(); }}
             style={{ ...B, background: 'none', color: M.maroon, padding: '4px', borderRadius: '6px' }}
-            title="Deletar sala"
+            title="Deletar sala" aria-label="Deletar sala"
           >
             <FaTrash size={14} />
           </button>

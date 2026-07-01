@@ -15,14 +15,14 @@ const SHORTCUTS = [
 
 export default function ShortcutsModal({ M, onClose }) {
   return (
-    <div onClick={e => e.target === e.currentTarget && onClose()} style={{
+    <div role="dialog" aria-modal="true" aria-label="Atalhos do teclado" onClick={e => e.target === e.currentTarget && onClose()} style={{
       position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.72)', display: 'flex',
       alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '16px', backdropFilter: 'blur(4px)',
     }}>
       <div style={{ background: M.mantle, border: `1px solid ${M.surface0}`, borderRadius: '16px', width: '100%', maxWidth: '400px', maxHeight: '80vh', overflow: 'auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 16px 8px' }}>
           <span style={{ color: M.text, fontWeight: 700, fontSize: '0.92rem' }}>Atalhos do teclado</span>
-          <button onClick={onClose} style={{ ...B, padding: 6, background: M.surface0, borderRadius: 10, color: M.text, display: 'flex' }}><FaTimes size={14} /></button>
+          <button onClick={onClose} aria-label="Fechar" style={{ ...B, padding: 6, background: M.surface0, borderRadius: 10, color: M.text, display: 'flex' }}><FaTimes size={14} /></button>
         </div>
         <div style={{ padding: '8px 16px 16px' }}>
           {SHORTCUTS.map((sc, i) => (

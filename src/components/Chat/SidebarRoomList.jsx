@@ -14,14 +14,14 @@ export default function SidebarRoomList({
   const cats = [...new Set(others.map(r => r.category || '').sort())];
 
   return (<>
-    <div style={{ padding: '7px 8px 4px', fontSize: '0.67rem', fontWeight: 700, color: M.ov2, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-      Salas {showArchived ? '(arquivadas)' : ''}
-    </div>
+      <div style={{ padding: '7px 8px 4px', fontSize: '0.67rem', fontWeight: 700, color: M.text, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+        Salas {showArchived ? '(arquivadas)' : ''}
+      </div>
     <button onClick={onToggleArchived} style={{ ...B, background: 'none', color: M.ov0, padding: '4px 8px', fontSize: '0.68rem', width: '100%', justifyContent: 'flex-start', gap: 4 }}>
       <FaArchive size={10} /> {showArchived ? 'Mostrar ativas' : 'Mostrar arquivadas'}
     </button>
     {dms.length > 0 && <>
-      <div style={{ padding: '7px 8px 4px', marginTop: 4, fontSize: '0.67rem', fontWeight: 700, color: M.ov2, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Mensagens diretas</div>
+      <div style={{ padding: '7px 8px 4px', marginTop: 4, fontSize: '0.67rem', fontWeight: 700, color: M.text, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Mensagens diretas</div>
       {dms.map(r => (
         <RoomListItem key={r.id} room={r} currentRoomId={roomId} isDM
           onSwitch={(r) => { onSwitch(r); closeSide(); }} M={M} />
@@ -37,7 +37,7 @@ export default function SidebarRoomList({
     </>}
     {others.length > 0 && <>
       {cats.length === 0 || cats.length === 1 && cats[0] === '' ? (
-        <div style={{ padding: '7px 8px 4px', marginTop: 4, fontSize: '0.67rem', fontWeight: 700, color: M.ov2, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Canais</div>
+        <div style={{ padding: '7px 8px 4px', marginTop: 4, fontSize: '0.67rem', fontWeight: 700, color: M.text, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Canais</div>
       ) : null}
       {cats.filter(c => c).map(cat => (
         <div key={cat}>

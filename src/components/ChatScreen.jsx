@@ -676,7 +676,7 @@ export default function ChatScreen({ roomId, token: _token }) {
       <MobileOverlay mobile={mobile} sideOpen={sideOpen} onClose={() => setSideOpen(false)} M={M} />
       <ReconnectBanner connected={connected} M={M} />
 
-      <aside style={{
+      <aside role="complementary" aria-label="Barra lateral" style={{
         width: SW, flexShrink: 0, background: M.mantle, borderRight: `1px solid ${M.surface0}`,
         display: 'flex', flexDirection: 'column', height: '100vh',
         position: mobile ? 'fixed' : 'relative',
@@ -686,18 +686,22 @@ export default function ChatScreen({ roomId, token: _token }) {
       }}>
         <SidebarHeader theme={theme} setTheme={setTheme} mobile={mobile} onClose={() => setSideOpen(false)} M={M} />
         <div style={{ flex: 1, overflowY: 'auto', padding: '6px' }}>
-          <SidebarRoomList
-            rooms={rooms} M={M} roomId={roomId} favorites={favorites}
-            mobile={mobile} showArchived={showArchived}
-            onSwitch={handleSwitch}
-            onToggleFavorite={toggleFavorite}
-            onToggleArchived={() => setShowArchived(s => !s)}
-            onCloseSidebar={() => setSideOpen(false)}
-          />
-          <SidebarQuickAccess savedMsgs={savedMsgs} pinnedMsgs={pinnedMsgs}
-            onSavedClick={() => setShowSaved(s => !s)}
-            onPinnedClick={() => setShowPinned(s => !s)}
-            onContactsClick={() => { fetch('/api/users/contacts', { headers, credentials: 'include' }).then(r => r.ok ? r.json() : []).then(cs => { setContacts(cs); setShowContacts(s => !s); setShowProfile({}); }); }} M={M} />
+          <nav aria-label="Salas">
+            <SidebarRoomList
+              rooms={rooms} M={M} roomId={roomId} favorites={favorites}
+              mobile={mobile} showArchived={showArchived}
+              onSwitch={handleSwitch}
+              onToggleFavorite={toggleFavorite}
+              onToggleArchived={() => setShowArchived(s => !s)}
+              onCloseSidebar={() => setSideOpen(false)}
+            />
+          </nav>
+          <nav aria-label="Acesso rápido">
+            <SidebarQuickAccess savedMsgs={savedMsgs} pinnedMsgs={pinnedMsgs}
+              onSavedClick={() => setShowSaved(s => !s)}
+              onPinnedClick={() => setShowPinned(s => !s)}
+              onContactsClick={() => { fetch('/api/users/contacts', { headers, credentials: 'include' }).then(r => r.ok ? r.json() : []).then(cs => { setContacts(cs); setShowContacts(s => !s); setShowProfile({}); }); }} M={M} />
+          </nav>
         </div>
         <SidebarUserFooter user={user} M={M}
           onProfile={() => setShowProfile({ id: user.id, nome: user.nome, bio: user.bio, created_at: user.created_at, is_owner: false })} />

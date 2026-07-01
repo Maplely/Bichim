@@ -12,20 +12,20 @@ export default function FormatToolbar({
     }}>
       <button onClick={() => onFormat('**', '**')}
         style={{ ...B, background: 'none', color: M.sub0, padding: '4px 6px', borderRadius: 4 }}
-        title="Negrito"><FaBold size={11} /></button>
+        title="Negrito" aria-label="Negrito"><FaBold size={11} /></button>
       <button onClick={() => onFormat('*', '*')}
         style={{ ...B, background: 'none', color: M.sub0, padding: '4px 6px', borderRadius: 4 }}
-        title="Itálico"><FaItalic size={11} /></button>
+        title="Itálico" aria-label="Itálico"><FaItalic size={11} /></button>
       <button onClick={() => onFormat('`', '`')}
         style={{ ...B, background: 'none', color: M.sub0, padding: '4px 6px', borderRadius: 4 }}
-        title="Código"><FaCode size={11} /></button>
+        title="Código" aria-label="Código"><FaCode size={11} /></button>
       <button onClick={() => onFormat('\n- ', '')}
         style={{ ...B, background: 'none', color: M.sub0, padding: '4px 6px', borderRadius: 4 }}
-        title="Lista"><FaListUl size={11} /></button>
+        title="Lista" aria-label="Lista"><FaListUl size={11} /></button>
       <div style={{ flex: 1 }} />
       <button onClick={() => fileInputRef.current?.click()}
         style={{ ...B, background: 'none', color: M.sub0, padding: '4px 6px', borderRadius: 4 }}
-        title="Anexar"><FaPaperclip size={11} /></button>
+        title="Anexar" aria-label="Anexar"><FaPaperclip size={11} /></button>
       <input ref={fileInputRef} type="file" hidden
         onChange={e => { onAttach(e.target.files?.[0]); e.target.value = ''; }} />
       <button onClick={() => { if (recording) onStopRecord(); else onRecord(); }}
@@ -34,29 +34,30 @@ export default function FormatToolbar({
           color: recording ? M.red : M.sub0, padding: '4px 6px', borderRadius: 4,
           animation: recording ? 'pulse 1s infinite' : 'none',
         }}
-        title={recording ? 'Parar gravação' : 'Gravar áudio'}>
+        title={recording ? 'Parar gravação' : 'Gravar áudio'}
+        aria-label={recording ? 'Parar gravação' : 'Gravar áudio'}>
         {recording
           ? <span style={{ width: 8, height: 8, borderRadius: '50%', background: M.red, display: 'inline-block' }} />
           : <FaMicrophone size={11} />}
       </button>
       <button onClick={onGifClick}
         style={{ ...B, background: gifOpen ? M.surface1 : 'none', color: M.sub0, padding: '4px 6px', borderRadius: 4 }}
-        title="GIF"><FaImage size={11} /></button>
+        title="GIF" aria-label="GIF"><FaImage size={11} /></button>
       <button onClick={onStickersClick}
         style={{ ...B, background: stickerOpen ? M.surface1 : 'none', color: M.sub0, padding: '4px 6px', borderRadius: 4 }}
-        title="Stickers"><FaGift size={11} /></button>
+        title="Stickers" aria-label="Stickers"><FaGift size={11} /></button>
       <button onClick={onEmojiClick}
         style={{ ...B, background: emojiOpen ? M.surface1 : 'none', color: M.sub0, padding: '4px 6px', borderRadius: 4 }}
-        title="Emoji"><FaSmile size={11} /></button>
+        title="Emoji" aria-label="Emoji"><FaSmile size={11} /></button>
       <button onClick={onSlashHelp}
         style={{ ...B, background: 'none', color: M.sub0, padding: '4px 6px', borderRadius: 4 }}
-        title="Comandos (/)"><span style={{ fontSize: '11px', fontWeight: 700 }}>/</span></button>
+        title="Comandos (/)" aria-label="Comandos"><span style={{ fontSize: '11px', fontWeight: 700 }}>/</span></button>
       <button onClick={onMultiSelect}
         style={{
           ...B, background: multiSelect ? M.surface1 : 'none',
           color: multiSelect ? M.mauve : M.sub0, padding: '4px 6px', borderRadius: 4,
         }}
-        title="Selecionar"><FaCheckSquare size={11} /></button>
+        title="Selecionar" aria-label="Selecionar"><FaCheckSquare size={11} /></button>
     </div>
   );
 }

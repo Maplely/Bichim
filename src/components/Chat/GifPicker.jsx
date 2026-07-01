@@ -9,13 +9,13 @@ export default function GifPicker({ query, results, searching, onSearch, onSelec
     }}>
       <div style={{ display: 'flex', gap: 4, marginBottom: 4 }}>
         <input type="text" value={query} onChange={e => onSearch(e.target.value)}
-          placeholder="Buscar GIFs..." autoFocus
+          placeholder="Buscar GIFs..." aria-label="Buscar GIFs" autoFocus
           style={{
             flex: 1, background: M.surface1, border: 'none', borderRadius: 6,
             padding: '4px 8px', color: M.text, fontSize: '0.78rem',
             outline: 'none', fontFamily: 'inherit',
           }} />
-        <button onClick={onClose}
+        <button onClick={onClose} aria-label="Fechar GIFs"
           style={{ ...B, background: 'none', color: M.sub0, padding: 8, minWidth: 36, minHeight: 36 }}>
           <FaTimes size={12} />
         </button>

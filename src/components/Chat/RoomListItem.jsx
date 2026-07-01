@@ -20,13 +20,14 @@ export default function RoomListItem({ room, currentRoomId, onSwitch, onToggleFa
       }}>{room.name}</span>
       {onToggleFavorite && (
         <button onClick={e => { e.stopPropagation(); onToggleFavorite(room.id); }}
+          aria-label={isFavorite ? 'Desfavoritar sala' : 'Favoritar sala'}
           style={{ ...B, background: 'none', color: isFavorite ? M.peach : M.ov0, padding: 2, minWidth: 28, minHeight: 28 }}>
           <FaStar size={11} />
         </button>
       )}
       {room.member_count != null && (
         <span style={{
-          fontSize: '0.62rem', color: M.ov1, background: M.surface0,
+          fontSize: '0.62rem', color: M.ov0, background: M.surface0,
           borderRadius: 8, padding: '1px 6px', whiteSpace: 'nowrap',
         }}>{room.member_count}</span>
       )}

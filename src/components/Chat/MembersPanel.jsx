@@ -21,14 +21,14 @@ export default function MembersPanel({ members, onlineUsers, user, room, M, onCl
   };
 
   return (
-    <div onClick={e => e.target === e.currentTarget && onClose()} style={{
+    <div role="dialog" aria-modal="true" aria-label="Membros" onClick={e => e.target === e.currentTarget && onClose()} style={{
       position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.72)', display: 'flex',
       alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '16px', backdropFilter: 'blur(4px)',
     }}>
       <div style={{ background: M.mantle, border: `1px solid ${M.surface0}`, borderRadius: '16px', width: '100%', maxWidth: '400px', maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 16px 8px' }}>
           <span style={{ color: M.text, fontWeight: 700, fontSize: '0.92rem' }}>Membros ({members.length})</span>
-          <button onClick={onClose} style={{ ...B, padding: 6, background: M.surface0, borderRadius: 10, color: M.text, display: 'flex' }}><FaTimes size={14} /></button>
+          <button onClick={onClose} aria-label="Fechar" style={{ ...B, padding: 6, background: M.surface0, borderRadius: 10, color: M.text, display: 'flex' }}><FaTimes size={14} /></button>
         </div>
         <div style={{ overflow: 'auto', flex: 1, padding: '8px 16px 16px' }}>
           {sorted.map(m => {
@@ -56,10 +56,10 @@ export default function MembersPanel({ members, onlineUsers, user, room, M, onCl
                 </div>
                 {canManage && (
                   <div style={{ display: 'flex', gap: 2 }}>
-                    <button onClick={() => handleAction('toggleAdmin', m)} title={m.role === 'admin' ? 'Remover admin' : 'Tornar admin'} style={{ ...B, padding: 6, background: M.surface0, borderRadius: 8, color: M.blue, fontSize: '0.72rem' }}><FaUserShield size={11} /></button>
-                    <button onClick={() => handleAction('transfer', m)} title="Transferir propriedade" style={{ ...B, padding: 6, background: M.surface0, borderRadius: 8, color: M.yellow, fontSize: '0.72rem' }}><FaStar size={11} /></button>
-                    <button onClick={() => handleAction('kick', m)} title="Expulsar" style={{ ...B, padding: 6, background: M.surface0, borderRadius: 8, color: M.red, fontSize: '0.72rem' }}><FaUserMinus size={11} /></button>
-                    <button onClick={() => handleAction('ban', m)} title="Banir" style={{ ...B, padding: 6, background: M.surface0, borderRadius: 8, color: M.red, fontSize: '0.72rem' }}><FaBan size={11} /></button>
+                    <button onClick={() => handleAction('toggleAdmin', m)} title={m.role === 'admin' ? 'Remover admin' : 'Tornar admin'} aria-label={m.role === 'admin' ? 'Remover admin' : 'Tornar admin'} style={{ ...B, padding: 6, background: M.surface0, borderRadius: 8, color: M.blue, fontSize: '0.72rem' }}><FaUserShield size={11} /></button>
+                    <button onClick={() => handleAction('transfer', m)} title="Transferir propriedade" aria-label="Transferir propriedade" style={{ ...B, padding: 6, background: M.surface0, borderRadius: 8, color: M.yellow, fontSize: '0.72rem' }}><FaStar size={11} /></button>
+                    <button onClick={() => handleAction('kick', m)} title="Expulsar" aria-label="Expulsar" style={{ ...B, padding: 6, background: M.surface0, borderRadius: 8, color: M.red, fontSize: '0.72rem' }}><FaUserMinus size={11} /></button>
+                    <button onClick={() => handleAction('ban', m)} title="Banir" aria-label="Banir" style={{ ...B, padding: 6, background: M.surface0, borderRadius: 8, color: M.red, fontSize: '0.72rem' }}><FaBan size={11} /></button>
                   </div>
                 )}
               </div>

@@ -8,7 +8,7 @@ const B = {
 
 export default function ConfirmDialog({ message, onConfirm, onCancel, confirmLabel = 'Confirmar', danger = false }) {
   return (
-    <div onClick={e => e.target === e.currentTarget && onCancel()} style={{
+    <div role="dialog" aria-modal="true" aria-label="Confirmação" onClick={e => e.target === e.currentTarget && onCancel()} style={{
       position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.72)', display: 'flex',
       alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '16px', backdropFilter: 'blur(4px)',
     }}>

@@ -11,7 +11,7 @@ export default function ReplyIndicator({ replyingTo, onCancel, M }) {
       <span style={{ flex: 1, color: M.sub0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
         Respondendo a <strong style={{ color: M.mauve }}>{replyingTo.user_name}</strong>: {replyingTo.content}
       </span>
-      <button onClick={onCancel}
+      <button onClick={onCancel} aria-label="Cancelar resposta"
         style={{ background: 'none', border: 'none', cursor: 'pointer', color: M.sub0, display: 'flex', padding: 2 }}>
         <FaTimes size={10} />
       </button>

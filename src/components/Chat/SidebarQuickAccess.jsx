@@ -6,7 +6,7 @@ export default function SidebarQuickAccess({ savedMsgs, pinnedMsgs, onSavedClick
     <>
       <div style={{
         padding: '7px 8px 4px', marginTop: 8, fontSize: '0.67rem', fontWeight: 700,
-        color: M.ov2, textTransform: 'uppercase', letterSpacing: '0.08em',
+        color: M.text, textTransform: 'uppercase', letterSpacing: '0.08em',
       }}>
         Acesso rápido
       </div>

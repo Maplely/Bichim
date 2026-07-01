@@ -40,7 +40,7 @@ export default function ToastContainer() {
           }}>
             <Icon size={16} color={c} style={{ flexShrink: 0 }} />
             <span style={{ flex: 1 }}>{t.msg}</span>
-            <button onClick={() => remove(t.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: M.sub0, padding: 2, display: 'flex' }}>
+            <button onClick={() => remove(t.id)} aria-label="Fechar notificação" style={{ background: 'none', border: 'none', cursor: 'pointer', color: M.sub0, padding: 2, display: 'flex' }}>
               <FaTimes size={12} />
             </button>
           </div>

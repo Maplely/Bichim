@@ -34,7 +34,7 @@ export default function RoomHeader({
 
   return (
     <header style={{ background: M.mantle, borderBottom: `1px solid ${M.surface0}`, padding: '11px 16px', display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
-      {mobile && <button onClick={onOpenSidebar} style={{ ...B, background: 'none', color: M.sub0, padding: '4px', flexShrink: 0 }}><FaBars size={14} /></button>}
+      {mobile && <button onClick={onOpenSidebar} aria-label="Abrir sidebar" style={{ ...B, background: 'none', color: M.sub0, padding: '4px', flexShrink: 0 }}><FaBars size={14} /></button>}
       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flex: 1, minWidth: 0 }}>
         <span style={{ fontSize: '14px', lineHeight: 0 }}>{room?.password_hash ? <FaLock size={14} /> : <FaHashtag size={14} />}</span>
         <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
@@ -55,12 +55,12 @@ export default function RoomHeader({
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: M.green, display: 'inline-block' }} />
             {members.length}
           </span>
-          <button onClick={onToggleMembers} style={{ ...B, background: membersOpen ? M.surface0 : 'none', color: membersOpen ? M.text : M.sub0, padding: '6px 8px', borderRadius: '8px', lineHeight: 0 }}>
+          <button onClick={onToggleMembers} aria-label={membersOpen ? 'Fechar membros' : 'Membros'} style={{ ...B, background: membersOpen ? M.surface0 : 'none', color: membersOpen ? M.text : M.sub0, padding: '6px 8px', borderRadius: '8px', lineHeight: 0 }}>
             <FaUsers size={16} />
           </button>
         </div>
         <div ref={menuRef} style={{ position: 'relative' }}>
-          <button onClick={() => setMenuOpen(v => !v)} style={{ ...B, background: menuOpen ? M.surface0 : 'none', color: M.sub0, padding: '8px', minWidth: 36, minHeight: 36, borderRadius: '8px', lineHeight: 0 }}>
+          <button onClick={() => setMenuOpen(v => !v)} aria-label="Menu da sala" style={{ ...B, background: menuOpen ? M.surface0 : 'none', color: M.sub0, padding: '8px', minWidth: 36, minHeight: 36, borderRadius: '8px', lineHeight: 0 }}>
             <FaEllipsisV size={14} />
           </button>
           {menuOpen && (

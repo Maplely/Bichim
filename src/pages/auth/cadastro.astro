@@ -37,7 +37,7 @@ if (Astro.request.method === 'POST') {
 ---
 
 <BaseLayout title="Cadastro">
-  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--base);font-family:var(--font);color:var(--text)">
+  <main style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--base);font-family:var(--font);color:var(--text)">
     <div style="text-align:center;margin-bottom:32px">
       <div style="width:58px;height:58px;border-radius:18px;background:var(--mauve);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 32px var(--mauve)">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--crust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -50,17 +50,17 @@ if (Astro.request.method === 'POST') {
       <form method="POST" id="cadastroForm">
         <div style="display:flex;flex-direction:column;gap:16px">
           <div>
-            <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Nome</div>
+            <label for="nomeInput" style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px;display:block">Nome</label>
             <input type="text" name="nome" required autocomplete="name" placeholder="Seu nome" id="nomeInput"
               style="background:var(--base);border:1px solid var(--borda);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
           </div>
           <div>
-            <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Email</div>
+            <label for="emailInput" style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px;display:block">Email</label>
             <input type="email" name="email" required autocomplete="email" placeholder="seu@email.com" id="emailInput"
               style="background:var(--base);border:1px solid var(--borda);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
           </div>
           <div>
-            <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Senha</div>
+            <label for="senhaInput" style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px;display:block">Senha</label>
             <input type="password" name="senha" required autocomplete="new-password" placeholder="Mínimo 6 caracteres" id="senhaInput"
               style="background:var(--base);border:1px solid var(--borda);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
           </div>
@@ -100,5 +100,5 @@ if (Astro.request.method === 'POST') {
         el.addEventListener('input', () => { if (errorEl.textContent) errorEl.textContent = ''; });
       });
     </script>
-  </div>
+  </main>
 </BaseLayout>

@@ -5,7 +5,7 @@ export default function EditMsgModal({ editingMsg, onClose, onSubmit, M }) {
   const editRef = useRef(null);
   if (!editingMsg) return null;
   return (
-    <div onClick={e => e.target === e.currentTarget && onClose()} style={{
+    <div role="dialog" aria-modal="true" aria-label="Editar mensagem" onClick={e => e.target === e.currentTarget && onClose()} style={{
       position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.72)', display: 'flex',
       alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '16px', backdropFilter: 'blur(4px)',
     }}>
@@ -14,7 +14,7 @@ export default function EditMsgModal({ editingMsg, onClose, onSubmit, M }) {
         padding: '24px', width: '100%', maxWidth: '480px',
       }}>
         <div style={{ color: M.text, fontWeight: 700, fontSize: '0.92rem', marginBottom: '12px' }}>Editar mensagem</div>
-        <textarea ref={editRef} defaultValue={editingMsg.content}
+        <textarea ref={editRef} defaultValue={editingMsg.content} aria-label="Editar mensagem"
           onKeyDown={e => { if (e.key === 'Escape') onClose(); if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSubmit(editingMsg, editRef.current?.value); onClose(); } }}
           style={{ width: '100%', minHeight: 80, background: M.surface0, border: 'none', borderRadius: 8, color: M.text, padding: '10px', fontFamily: 'inherit', fontSize: '0.85rem', resize: 'vertical', outline: 'none' }}
           autoFocus />

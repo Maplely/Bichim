@@ -55,7 +55,7 @@ export default function ChatInput({
             placeholder="Digite uma mensagem..."
             rows={1} aria-label="Campo de mensagem"
             style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: M.text, fontFamily: 'inherit', fontSize: '0.875rem', resize: 'none', lineHeight: '1.5', padding: '8px 0 8px 8px', maxHeight: '120px', overflowY: 'auto' }} />
-          <button onClick={onSend} disabled={!input.trim() || sending}
+          <button onClick={onSend} disabled={!input.trim() || sending} aria-label="Enviar mensagem"
             style={{ ...B, padding: '8px', borderRadius: '9px', flexShrink: 0, background: sending ? M.surface1 : (input.trim() ? M.mauve : M.surface1), color: sending ? M.ov0 : (input.trim() ? M.crust : M.ov0), cursor: (!input.trim() || sending) ? 'not-allowed' : 'pointer', opacity: sending ? 0.6 : 1 }}>
             {sending ? <FaSpinner size={17} style={{ animation: 'spin 1s linear infinite' }} /> : <FaPaperPlane size={17} />}
           </button>

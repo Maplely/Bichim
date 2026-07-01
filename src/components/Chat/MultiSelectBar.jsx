@@ -23,7 +23,7 @@ export default function MultiSelectBar({ selectedMsgs, M, onClear, onDelete, onF
         <button onClick={onDelete} style={{ ...B, padding: '8px 12px', background: `${M.red}20`, borderRadius: 10, color: M.red, fontSize: '0.76rem', display: 'flex', alignItems: 'center', gap: 4 }}>
           <FaTrash size={12} /> Excluir
         </button>
-        <button onClick={onClear} style={{ ...B, padding: 8, background: M.surface0, borderRadius: 10, color: M.sub0, display: 'flex' }}>
+        <button onClick={onClear} aria-label="Limpar seleção" style={{ ...B, padding: 8, background: M.surface0, borderRadius: 10, color: M.sub0, display: 'flex' }}>
           <FaTimes size={14} />
         </button>
       </div>

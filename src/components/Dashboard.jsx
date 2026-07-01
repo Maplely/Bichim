@@ -148,7 +148,7 @@ export default function Dashboard({ token: _token }) {
           }}>
             {user?.nome?.[0]?.toUpperCase() || '?'}
           </div>
-          <button onClick={handleLogout} style={{ ...B, background: 'none', color: M.sub0, padding: '6px' }} title="Sair"><FaSignOutAlt size={14} /></button>
+          <button onClick={handleLogout} style={{ ...B, background: 'none', color: M.sub0, padding: '6px' }} title="Sair" aria-label="Sair"><FaSignOutAlt size={14} /></button>
         </div>
       </header>
 
@@ -259,19 +259,19 @@ function CreateModal({ onClose, onCreate, token }) {
     <Modal title="Nova sala" onClose={onClose}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
-          <Lbl>Nome da sala</Lbl>
-          <input type="text" value={name} onChange={e => setName(e.target.value)}
+          <Lbl htmlFor="roomNameInput">Nome da sala</Lbl>
+          <input id="roomNameInput" type="text" value={name} onChange={e => setName(e.target.value)}
             placeholder="minha-sala" autoFocus style={I}
             onKeyDown={e => e.key === 'Enter' && create()} />
         </div>
         <div>
-          <Lbl>Descrição (opcional)</Lbl>
-          <textarea value={desc} onChange={e => setDesc(e.target.value)}
+          <Lbl htmlFor="roomDescInput">Descrição (opcional)</Lbl>
+          <textarea id="roomDescInput" value={desc} onChange={e => setDesc(e.target.value)}
             placeholder="Descrição da sala..."
             rows={2} style={{ ...I, resize: 'none', fontFamily: 'inherit' }} />
         </div>
         <div>
-          <Lbl>Código de convite (automático)</Lbl>
+          <Lbl htmlFor="roomCodeInput">Código de convite (automático)</Lbl>
           <div style={{ display: 'flex', gap: '8px' }}>
             <div style={{ ...I, flex: 1, fontFamily: 'monospace', fontWeight: 700, fontSize: '1rem', letterSpacing: '0.12em', color: M.mauve, cursor: 'default' }}>
               {code}
@@ -289,7 +289,10 @@ function CreateModal({ onClose, onCreate, token }) {
           Adicionar senha (opcional)
         </label>
         {usePw && (
-          <input type="password" value={pw} onChange={e => setPw(e.target.value)} placeholder="Senha da sala" style={I} />
+          <div>
+            <Lbl htmlFor="roomPwInput">Senha da sala</Lbl>
+            <input id="roomPwInput" type="password" value={pw} onChange={e => setPw(e.target.value)} placeholder="Senha da sala" style={I} />
+          </div>
         )}
         {err && <p style={{ margin: 0, color: M.red, fontSize: '0.8rem' }}>{err}</p>}
         <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
@@ -362,8 +365,8 @@ function JoinModal({ onClose, onJoin, token }) {
       {step === 1 ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <Lbl>Código da sala (6 caracteres)</Lbl>
-            <input type="text" value={code}
+            <Lbl htmlFor="joinCodeInput">Código da sala (6 caracteres)</Lbl>
+            <input id="joinCodeInput" type="text" value={code}
               onChange={e => setCode(e.target.value.toUpperCase().slice(0, 6))}
               placeholder="UFP42X" maxLength={6} autoFocus
               style={{ ...I, fontFamily: 'monospace', fontSize: '1.15rem', fontWeight: 700, letterSpacing: '0.2em', textAlign: 'center' }}
@@ -381,8 +384,8 @@ function JoinModal({ onClose, onJoin, token }) {
             A sala é protegida por senha.
           </p>
           <div>
-            <Lbl>Senha</Lbl>
-            <input type="password" value={pw} onChange={e => setPw(e.target.value)}
+            <Lbl htmlFor="joinPwInput">Senha</Lbl>
+            <input id="joinPwInput" type="password" value={pw} onChange={e => setPw(e.target.value)}
               placeholder="••••••••" autoFocus style={I}
               onKeyDown={e => e.key === 'Enter' && joinRoom(code, pw)} />
           </div>

@@ -57,7 +57,7 @@ if (Astro.request.method === 'POST') {
 ---
 
 <BaseLayout title="Verificar Email">
-  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--base);font-family:var(--font);color:var(--text)">
+  <main style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--base);font-family:var(--font);color:var(--text)">
     <div style="background:var(--mantle);border:1px solid var(--borda);border-radius:18px;padding:28px;width:100%;max-width:400px">
       <h1 style="font-size:1.25rem;font-weight:700;margin-bottom:4px;color:var(--text)">Verifique seu e-mail</h1>
       <p style="font-size:0.85rem;color:var(--subtext0);margin-bottom:20px">
@@ -73,8 +73,8 @@ if (Astro.request.method === 'POST') {
       ) : (
         <form method="POST" style="display:flex;flex-direction:column;gap:16px">
           <div>
-            <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Código de verificação</div>
-            <input type="text" name="codigo" inputmode="numeric" maxlength="6" required placeholder="000000"
+            <label for="codigoInput" style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px;display:block">Código de verificação</label>
+            <input type="text" name="codigo" id="codigoInput" inputmode="numeric" maxlength="6" required placeholder="000000"
               style="background:var(--base);border:1px solid var(--borda);border-radius:8px;color:var(--text);font-family:inherit;font-size:1.5rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box;text-align:center;letter-spacing:0.5rem;font-weight:700" />
           </div>
 
@@ -100,5 +100,5 @@ if (Astro.request.method === 'POST') {
         <a href="/auth/login" style="color:var(--mauve)">← Voltar ao login</a>
       </p>
     </div>
-  </div>
+  </main>
 </BaseLayout>

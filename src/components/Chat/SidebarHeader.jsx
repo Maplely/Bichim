@@ -16,11 +16,11 @@ export default function SidebarHeader({ theme, setTheme, mobile, onClose, M }) {
       <span style={{ fontWeight: 700, fontSize: '0.88rem', flex: 1 }}>Bichim</span>
       <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         style={{ ...B, background: 'none', color: M.peach, padding: 8, minWidth: 36, minHeight: 36 }}
-        title="Alternar tema">
+        title="Alternar tema" aria-label="Alternar tema">
         {theme === 'dark' ? <FaSun size={13} /> : <FaMoon size={13} />}
       </button>
       {mobile && (
-        <button onClick={onClose}
+        <button onClick={onClose} aria-label="Fechar sidebar"
           style={{ ...B, background: 'none', color: M.sub0, padding: 8, minWidth: 36, minHeight: 36 }}>
           <FaTimes size={14} />
         </button>

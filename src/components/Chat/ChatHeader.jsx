@@ -38,11 +38,11 @@ export default function ChatHeader({
 
         <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
           {(isOwner || isAdmin) && (
-            <button onClick={onOpenMembers} title="Gerenciar Membros" style={{ ...B, padding: '8px', background: `${M.mauve}18`, color: M.mauve, borderRadius: '12px', fontSize: '0.76rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <button onClick={onOpenMembers} title="Gerenciar Membros" aria-label="Gerenciar Membros" style={{ ...B, padding: '8px', background: `${M.mauve}18`, color: M.mauve, borderRadius: '12px', fontSize: '0.76rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
               <FaUsers size={13} /> {!mobile && `Membros (${members.length})`}
             </button>
           )}
-          <button onClick={onToggleSide} title="Informações" style={{ ...B, padding: '8px', background: `${M.surface0}60`, color: M.sub0, borderRadius: '12px', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.76rem' }}>
+          <button onClick={onToggleSide} title="Informações" aria-label="Informações" style={{ ...B, padding: '8px', background: `${M.surface0}60`, color: M.sub0, borderRadius: '12px', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.76rem' }}>
             <FaInfoCircle size={13} /> {!mobile && 'Info'}
           </button>
         </div>

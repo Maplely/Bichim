@@ -14,13 +14,13 @@ export default function ProfileModal({ profileUser, M, onClose, onStartDM }) {
   ];
 
   return (
-    <div onClick={e => e.target === e.currentTarget && onClose()} style={{
+    <div role="dialog" aria-modal="true" aria-label="Perfil" onClick={e => e.target === e.currentTarget && onClose()} style={{
       position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.72)', display: 'flex',
       alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '16px', backdropFilter: 'blur(4px)',
     }}>
       <div style={{ background: M.mantle, border: `1px solid ${M.surface0}`, borderRadius: '16px', width: '100%', maxWidth: '360px', overflow: 'hidden' }}>
         <div style={{ background: `linear-gradient(135deg, ${color}40, ${M.mantle})`, padding: '24px 20px 20px', position: 'relative' }}>
-          <button onClick={onClose} style={{ ...B, position: 'absolute', top: 12, right: 12, padding: 6, background: 'rgba(0,0,0,0.3)', borderRadius: 10, color: '#fff', display: 'flex' }}><FaTimes size={14} /></button>
+          <button onClick={onClose} aria-label="Fechar" style={{ ...B, position: 'absolute', top: 12, right: 12, padding: 6, background: 'rgba(0,0,0,0.3)', borderRadius: 10, color: '#fff', display: 'flex' }}><FaTimes size={14} /></button>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
             <div style={{ width: 56, height: 56, borderRadius: '50%', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', fontWeight: 700, color: '#fff' }}>{profileUser.nome?.[0]?.toUpperCase()}</div>
             <div style={{ textAlign: 'center' }}>

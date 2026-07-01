@@ -30,12 +30,12 @@ export default function SidebarUserFooter({ user, onProfile, M }) {
       </div>
       <button onClick={onProfile}
         style={{ ...B, background: 'none', color: M.sub0, padding: 8, minWidth: 36, minHeight: 36 }}
-        title="Meu perfil"><FaUser size={12} /></button>
+        title="Meu perfil" aria-label="Meu perfil"><FaUser size={12} /></button>
       <a href="/chat"
         style={{
           ...B, background: 'none', color: M.sub0, padding: 8, minWidth: 36, minHeight: 36,
           textDecoration: 'none',
-        }} title="Voltar"><FaSignOutAlt size={14} /></a>
+        }} title="Voltar" aria-label="Voltar"><FaSignOutAlt size={14} /></a>
     </div>
   );
 }

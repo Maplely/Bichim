@@ -64,7 +64,7 @@ function renderMd(raw, previews) {
     .replace(/<table>/g, `<table style="border-collapse:collapse;margin:6px 0;width:100%;font-size:0.85em;">`)
     .replace(/<th>/g, `<th style="border:1px solid ${M.s1};padding:6px 10px;background:${M.s0};text-align:left;">`)
     .replace(/<td>/g, `<td style="border:1px solid ${M.s1};padding:6px 10px;">`)
-    .replace(/<img /g, `<img style="max-width:100%;border-radius:8px;margin:4px 0;cursor:pointer;" onclick="window.__openLightbox && window.__openLightbox(this.src)" `);
+    .replace(/<img /g, `<img alt="Imagem" style="max-width:100%;border-radius:8px;margin:4px 0;cursor:pointer;" onclick="window.__openLightbox && window.__openLightbox(this.src)" `);
   r = r.replace(/\|\|(.+?)\|\|/g, `<span class="spoiler" style="background:${M.surface1};color:transparent;cursor:pointer;border-radius:4px;padding:0 3px;transition:color 0.2s" onclick="this.style.color=this.style.background==='transparent'?'':this.style.background='transparent';this.style.color=this.style.color==='transparent'?'${M.text}':'transparent';" onmouseenter="this.style.color='${M.text}'" onmouseleave="if(this.style.background!=='transparent')this.style.color='transparent'">$1</span>`);
   return r;
 }
@@ -111,7 +111,7 @@ function LinkPreview({ preview, onImageClick }) {
     <a href={preview.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'block', marginTop: 6 }}>
       <div style={{ border: `1px solid ${M.s1}`, borderRadius: 10, overflow: 'hidden', maxWidth: 300, background: M.s0 }}>
         {preview.image && (
-          <img src={preview.image} alt="" onClick={(e) => { e.preventDefault(); onImageClick?.(preview.image); }}
+          <img src={preview.image} alt={preview.title || 'Preview do link'} onClick={(e) => { e.preventDefault(); onImageClick?.(preview.image); }}
             style={{ width: '100%', height: 140, objectFit: 'cover', cursor: 'pointer' }} />
         )}
         <div style={{ padding: '8px 10px' }}>
@@ -195,14 +195,14 @@ export default function MsgBubble({ msg, grouped, isOwn, onReact, onEdit, onDele
             display: 'flex', gap: 1, background: M.crust, borderRadius: 8, padding: '3px 4px',
             border: `1px solid ${M.surface1}`, boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
           }}>
-            {onReply && <button onClick={() => onReply(msg)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: M.sub0, padding: '6px 8px', display: 'flex', fontSize: '0.7rem', alignItems: 'center', justifyContent: 'center' }} title="Responder"><FaReply size={12} /></button>}
+            {onReply && <button onClick={() => onReply(msg)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: M.sub0, padding: '6px 8px', display: 'flex', fontSize: '0.7rem', alignItems: 'center', justifyContent: 'center' }} title="Responder" aria-label="Responder"><FaReply size={12} /></button>}
             {emojis.slice(0, 4).map(emoji => (
               <button key={emoji} onClick={() => onReact?.(msg.id, emoji)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 6px', fontSize: '0.85rem', lineHeight: '1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{emoji}</button>
             ))}
-            {onTranslate && <button onClick={async () => { if (!translated) { setTranslated('...'); try { const r = await fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: msg.content, target_lang: 'pt-br' }) }); const d = await r.json(); setTranslated(d.translated || msg.content); } catch { setTranslated(msg.content); } } else { setTranslated(null); } }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: M.blue, padding: '6px 8px', display: 'flex', fontSize: '0.7rem', alignItems: 'center', justifyContent: 'center' }} title="Traduzir"><FaLanguage size={12} /></button>}
-            {onPin && <button onClick={() => onPin(msg)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: msg.pinned ? M.yellow : M.sub0, padding: '6px 8px', display: 'flex', fontSize: '0.7rem', alignItems: 'center', justifyContent: 'center' }} title={msg.pinned ? 'Desafixar' : 'Fixar'}><FaThumbtack size={12} /></button>}
-            {onEdit && <button onClick={() => onEdit(msg)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: M.sub0, padding: '6px 8px', display: 'flex', fontSize: '0.7rem', alignItems: 'center', justifyContent: 'center' }} title="Editar"><FaEdit size={12} /></button>}
-            {onDelete && <button onClick={() => onDelete(msg)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: M.red, padding: '6px 8px', display: 'flex', fontSize: '0.7rem', alignItems: 'center', justifyContent: 'center' }} title="Excluir"><FaTrash size={12} /></button>}
+            {onTranslate && <button onClick={async () => { if (!translated) { setTranslated('...'); try { const r = await fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: msg.content, target_lang: 'pt-br' }) }); const d = await r.json(); setTranslated(d.translated || msg.content); } catch { setTranslated(msg.content); } } else { setTranslated(null); } }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: M.blue, padding: '6px 8px', display: 'flex', fontSize: '0.7rem', alignItems: 'center', justifyContent: 'center' }} title="Traduzir" aria-label="Traduzir"><FaLanguage size={12} /></button>}
+            {onPin && <button onClick={() => onPin(msg)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: msg.pinned ? M.yellow : M.sub0, padding: '6px 8px', display: 'flex', fontSize: '0.7rem', alignItems: 'center', justifyContent: 'center' }} title={msg.pinned ? 'Desafixar' : 'Fixar'} aria-label={msg.pinned ? 'Desafixar' : 'Fixar'}><FaThumbtack size={12} /></button>}
+            {onEdit && <button onClick={() => onEdit(msg)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: M.sub0, padding: '6px 8px', display: 'flex', fontSize: '0.7rem', alignItems: 'center', justifyContent: 'center' }} title="Editar" aria-label="Editar"><FaEdit size={12} /></button>}
+            {onDelete && <button onClick={() => onDelete(msg)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: M.red, padding: '6px 8px', display: 'flex', fontSize: '0.7rem', alignItems: 'center', justifyContent: 'center' }} title="Excluir" aria-label="Excluir"><FaTrash size={12} /></button>}
           </div>
         )}
       </div>

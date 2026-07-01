@@ -10,18 +10,18 @@ export default function ContactsPanel({ contacts, onStartDM, onClose, M }) {
   );
 
   return (
-    <div style={{
+    <div role="dialog" aria-modal="true" aria-label="Contatos" style={{
       position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.72)', display: 'flex',
       alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '16px', backdropFilter: 'blur(4px)',
     }}>
       <div style={{ background: M.mantle, border: `1px solid ${M.surface0}`, borderRadius: '16px', width: '100%', maxWidth: '400px', maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 16px 8px' }}>
           <span style={{ color: M.text, fontWeight: 700, fontSize: '0.92rem' }}>Contatos</span>
-          <button onClick={onClose} style={{ ...B, padding: 6, background: M.surface0, borderRadius: 10, color: M.text, display: 'flex' }}><FaTimes size={14} /></button>
+          <button onClick={onClose} aria-label="Fechar" style={{ ...B, padding: 6, background: M.surface0, borderRadius: 10, color: M.text, display: 'flex' }}><FaTimes size={14} /></button>
         </div>
         <div style={{ padding: '8px 16px', position: 'relative' }}>
           <FaSearch size={12} style={{ position: 'absolute', left: 26, top: '50%', transform: 'translateY(-50%)', color: M.sub0 }} />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar contato..." style={{ width: '100%', padding: '8px 8px 8px 28px', background: M.surface0, border: 'none', borderRadius: 10, color: M.text, fontSize: '0.82rem', outline: 'none' }} />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar contato..." aria-label="Buscar contato" style={{ width: '100%', padding: '8px 8px 8px 28px', background: M.surface0, border: 'none', borderRadius: 10, color: M.text, fontSize: '0.82rem', outline: 'none' }} />
         </div>
         <div style={{ overflow: 'auto', flex: 1, padding: '0 16px 16px' }}>
           {filtered.map(c => (

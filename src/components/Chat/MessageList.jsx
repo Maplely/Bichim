@@ -28,7 +28,7 @@ export default function MessageList({
               {showUnreadDivider && <UnreadDivider M={M} />}
               <div onContextMenu={(e) => onContextMenu(e, msg)} style={{ display: 'flex', alignItems: 'flex-start', gap: 4 }}>
                 {multiSelect && (
-                  <button onClick={() => onToggleSelect(msg.id)} style={{ ...B, background: 'none', color: M.sub0, padding: '6px 2px', marginTop: 12, flexShrink: 0 }}>
+                  <button onClick={() => onToggleSelect(msg.id)} aria-label={selectedIds.has(msg.id) ? 'Desselecionar mensagem' : 'Selecionar mensagem'} style={{ ...B, background: 'none', color: M.sub0, padding: '6px 2px', marginTop: 12, flexShrink: 0 }}>
                     {selectedIds.has(msg.id) ? <FaCheckSquare size={14} color={M.mauve} /> : <FaRegSquare size={14} />}
                   </button>
                 )}

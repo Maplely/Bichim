@@ -4,7 +4,7 @@ import { B } from './constants.js';
 export default function TransferModal({ target, room, M, onClose, onConfirm }) {
   if (!target) return null;
   return (
-    <div onClick={e => e.target === e.currentTarget && onClose()} style={{
+    <div role="dialog" aria-modal="true" aria-label="Transferir sala" onClick={e => e.target === e.currentTarget && onClose()} style={{
       position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.72)', display: 'flex',
       alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '16px', backdropFilter: 'blur(4px)',
     }}>

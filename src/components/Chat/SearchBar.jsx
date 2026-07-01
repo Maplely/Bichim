@@ -8,13 +8,13 @@ export default function SearchBar({ open, query, searching, results, onQueryChan
       <div style={{ display: 'flex', gap: 6, alignItems: 'center', background: M.surface0, borderRadius: 8, padding: '0 10px' }}>
         <FaSearch size={12} color={M.ov0} />
         <input type="text" value={query} onChange={e => onQueryChange(e.target.value)}
-          placeholder="Pesquisar mensagens..." autoFocus
+          placeholder="Pesquisar mensagens..." aria-label="Pesquisar mensagens" autoFocus
           style={{
             flex: 1, background: 'none', border: 'none', outline: 'none', color: M.text,
             fontFamily: 'inherit', fontSize: '0.84rem', padding: '8px 0',
           }} />
         {searching && <FaSpinner size={12} style={{ animation: 'spin 1s linear infinite', color: M.ov0 }} />}
-        <button onClick={onClose}
+        <button onClick={onClose} aria-label="Fechar pesquisa"
           style={{ ...B, background: 'none', color: M.sub0, padding: 8, minWidth: 36, minHeight: 36 }}>
           <FaTimes size={12} />
         </button>
