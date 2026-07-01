@@ -158,7 +158,7 @@ export default function MsgBubble({ msg, grouped, isOwn, onReact, onEdit, onDele
           <span style={{ fontSize: '0.78rem', fontWeight: 700, color: isOwn ? M.mauve : getColor(msg.user_name) }}>
             {msg.user_name}
           </span>
-          <span style={{ fontSize: '0.67rem', color: 'var(--overlay1, #3A3A3A)' }}>
+          <span style={{ fontSize: '0.67rem', color: 'var(--subtext0, #808080)' }}>
             {msg.created_at ? new Date(msg.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : ''}
           </span>
         </div>

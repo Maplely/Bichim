@@ -46,23 +46,23 @@ if (Astro.request.method === 'POST') {
       <p style="margin:0;color:var(--subtext0);font-size:0.85rem">Criar nova conta</p>
     </div>
 
-    <div style="background:var(--mantle);border:1px solid var(--surface0);border-radius:18px;padding:28px;width:100%;max-width:380px">
+    <div style="background:var(--mantle);border:1px solid var(--borda);border-radius:18px;padding:28px;width:100%;max-width:380px">
       <form method="POST" id="cadastroForm">
         <div style="display:flex;flex-direction:column;gap:16px">
           <div>
             <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Nome</div>
             <input type="text" name="nome" required autocomplete="name" placeholder="Seu nome" id="nomeInput"
-              style="background:var(--base);border:1px solid var(--surface0);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
+              style="background:var(--base);border:1px solid var(--borda);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
           </div>
           <div>
             <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Email</div>
             <input type="email" name="email" required autocomplete="email" placeholder="seu@email.com" id="emailInput"
-              style="background:var(--base);border:1px solid var(--surface0);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
+              style="background:var(--base);border:1px solid var(--borda);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
           </div>
           <div>
             <div style="font-size:0.78rem;font-weight:600;color:var(--subtext1);margin-bottom:6px">Senha</div>
             <input type="password" name="senha" required autocomplete="new-password" placeholder="Mínimo 6 caracteres" id="senhaInput"
-              style="background:var(--base);border:1px solid var(--surface0);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
+              style="background:var(--base);border:1px solid var(--borda);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.875rem;padding:10px 12px;outline:none;width:100%;box-sizing:border-box" />
           </div>
 
           <p id="cadastroError" style="margin:0;color:var(--red);font-size:0.8rem">{errorMessage}</p>
