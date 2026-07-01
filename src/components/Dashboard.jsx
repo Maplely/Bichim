@@ -138,7 +138,7 @@ export default function Dashboard({ token: _token }) {
           <div style={{ width: 32, height: 32, borderRadius: '50%', background: M.mauve, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <FaComment size={15} color={M.crust} />
           </div>
-          <span style={{ fontWeight: 700, fontSize: '1rem' }}>Chat Local</span>
+          <span style={{ fontWeight: 700, fontSize: '1rem' }}>Bichim</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{

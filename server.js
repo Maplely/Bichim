@@ -50,7 +50,7 @@ setInterval(() => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`[server] Chat Local rodando em http://localhost:${PORT}`);
+  console.log(`[server] Bichim rodando em http://localhost:${PORT}`);
 });
 
 process.on('uncaughtException', (err) => {

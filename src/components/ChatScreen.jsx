@@ -112,7 +112,7 @@ export default function ChatScreen({ roomId, token: _token }) {
   const searchTimer = useRef(null);
   const fileInputRef = useRef(null);
   const dragRef = useRef(null);
-  const prevTitle = useRef(typeof document !== 'undefined' ? document.title : 'Chat');
+  const prevTitle = useRef(typeof document !== 'undefined' ? document.title : 'Bichim');
 
   const headers = {
     'Content-Type': 'application/json',
@@ -172,7 +172,7 @@ export default function ChatScreen({ roomId, token: _token }) {
       if (last && last.user_id !== user?.id) {
         soundEnabled.current && playMsgSound();
         if (!last.__system) {
-          pushNotify(`${last.user_name} em ${room?.name || 'Chat'}`, last.content.slice(0, 100));
+          pushNotify(`${last.user_name} em ${room?.name || 'Bichim'}`, last.content.slice(0, 100));
         }
       }
     }
@@ -186,7 +186,7 @@ export default function ChatScreen({ roomId, token: _token }) {
     const unread = msgs.filter(m => !m.__system && m.user_id !== user?.id && (lastReadId ? m.id > lastReadId : false)).length;
     setFaviconBadge(unread);
     if (unread > 0) {
-      document.title = `(${unread}) ${room?.name || 'Chat'} - Chat Local`;
+      document.title = `(${unread}) ${room?.name || 'Bichim'} - Bichim`;
     } else {
       document.title = prevTitle.current;
     }

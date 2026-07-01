@@ -13,7 +13,7 @@ export default function SidebarHeader({ theme, setTheme, mobile, onClose, M }) {
       }}>
         <FaComment size={13} color={M.crust} />
       </div>
-      <span style={{ fontWeight: 700, fontSize: '0.88rem', flex: 1 }}>Chat Local</span>
+      <span style={{ fontWeight: 700, fontSize: '0.88rem', flex: 1 }}>Bichim</span>
       <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         style={{ ...B, background: 'none', color: M.peach, padding: 8, minWidth: 36, minHeight: 36 }}
         title="Alternar tema">

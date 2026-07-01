@@ -1,4 +1,4 @@
-# Chat Local
+# Bichim
 
 Chat em tempo real com salas públicas/privadas, DM, agendamento de mensagens, sistema de verificação por email e mais.
 
