@@ -27,7 +27,7 @@ export default function createApp() {
   app.use(express.json({ limit: '50mb' }));
   app.use(rateLimit);
   app.use(express.static(path.join(root, 'dist', 'client')));
-  app.use('/uploads', express.static(path.join(root, 'uploads')));
+  app.use('/uploads', express.static(process.env.UPLOADS_DIR || path.join(root, 'uploads')));
 
   app.use('/api', authRoutes);
   app.use('/api', roomRoutes);

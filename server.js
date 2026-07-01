@@ -5,6 +5,7 @@ import { Server } from 'socket.io';
 import createApp from './backend/app.js';
 import { setupSocket } from './backend/socket.js';
 import Room from './backend/models/Room.js';
+import db from './backend/config/db.js';
 
 const app = createApp();
 const server = http.createServer(app);
@@ -59,5 +60,5 @@ process.on('uncaughtException', (err) => {
 process.on('unhandledRejection', (reason) => {
   console.error('Promise rejeitada:', reason);
 });
-process.on('SIGTERM', () => process.exit(0));
-process.on('SIGINT', () => process.exit(0));
+process.on('SIGTERM', () => { console.log('[server] SIGTERM received, closing database...'); db.close(); process.exit(0); });
+process.on('SIGINT', () => { db.close(); process.exit(0); });

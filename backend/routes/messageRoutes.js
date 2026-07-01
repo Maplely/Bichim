@@ -9,7 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '../..');
 
 const storage = multer.diskStorage({
-  destination: path.join(root, 'uploads'),
+  destination: process.env.UPLOADS_DIR || path.join(root, 'uploads'),
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
     cb(null, `${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`);
