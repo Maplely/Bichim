@@ -1,28 +1,17 @@
 import { defineMiddleware } from 'astro:middleware';
-import { jwtVerify } from 'jose';
 import { getSessionToken } from '../lib/auth/sessao';
 
 const PUBLIC_ROUTES = ['/', '/auth/login', '/auth/cadastro', '/auth/verificacao', '/404'];
 
-let _jwtSecret: Uint8Array | null = null;
-function getJwtSecret(): Uint8Array {
-  if (!_jwtSecret) {
-    const secret = import.meta.env.JWT_SECRET || process.env.JWT_SECRET;
-    if (!secret) throw new Error('JWT_SECRET environment variable is required');
-    _jwtSecret = new TextEncoder().encode(secret);
-  }
-  return _jwtSecret;
-}
+const PORT = process.env.PORT || 3000;
 
 async function isValidToken(token: string | null): Promise<boolean> {
   if (!token) return false;
   try {
-    const { payload } = await jwtVerify(token, getJwtSecret());
-    const now = Math.floor(Date.now() / 1000);
-    if (payload.exp && payload.exp < now) return false;
-    if (payload.nbf && payload.nbf > now) return false;
-    if (!payload.id && !payload.sub) return false;
-    return true;
+    const res = await fetch(`http://127.0.0.1:${PORT}/api/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.ok;
   } catch {
     return false;
   }

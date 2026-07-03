@@ -40,7 +40,7 @@ class AuthController {
 
       await Usuario.criar({ nome: nome.trim(), email, senha_hash, codigo_verificacao, codigo_expiracao });
       console.log(`[DEV] Código de verificação para ${email}: ${codigo_verificacao}`);
-      logCodigo(email, codigo_verificacao);
+      try { logCodigo(email, codigo_verificacao); } catch (e) { console.error('Erro ao logar código:', e); }
 
       res.status(201).json({ mensagem: 'Cadastro realizado! Verifique seu email para ativar a conta.' });
     } catch (err) {
@@ -144,7 +144,7 @@ class AuthController {
       const codigo_expiracao = new Date(Date.now() + 30 * 60 * 1000).toISOString();
       await Usuario.salvarCodigo(email, codigo, codigo_expiracao);
       console.log(`[DEV] Novo código para ${email}: ${codigo}`);
-      logCodigo(email, codigo);
+      try { logCodigo(email, codigo); } catch (e) { console.error('Erro ao logar código:', e); }
 
       res.json({ mensagem: 'Código reenviado com sucesso' });
     } catch (err) {

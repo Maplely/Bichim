@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 3000;
 const API_BASE = `http://127.0.0.1:${PORT}`;
 const erroParam = Astro.url.searchParams.get('erro');
 let errorMessage = erroParam === 'nao_autorizado' ? 'Sua sessão expirou. Faça login novamente.' : '';
+let verificacaoEmail = '';
 
 if (Astro.request.method === 'POST') {
   try {
@@ -29,6 +30,9 @@ if (Astro.request.method === 'POST') {
       } else {
         const err = await response.json();
         errorMessage = err.erro || 'Credenciais inválidas.';
+        if (err.erro === 'Conta não verificada. Verifique seu email.') {
+          verificacaoEmail = email;
+        }
       }
     }
   } catch (error) {
@@ -66,6 +70,7 @@ if (Astro.request.method === 'POST') {
           </div>
 
           <p id="loginError" style="margin:0;color:var(--red);font-size:0.8rem">{errorMessage}</p>
+          {verificacaoEmail && <p style="margin:4px 0 0;font-size:0.82rem"><a href="/auth/verificacao?email={verificacaoEmail}" style="color:var(--mauve)">Reenviar código de verificação</a></p>}
 
           <button type="submit" id="loginBtn"
             style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:4px;padding:13px;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-family:inherit;transition:all 0.15s;background:var(--mauve);color:var(--crust);font-size:0.9rem">

@@ -84,12 +84,8 @@ export default function Dashboard({ token: _token }) {
   }, []);
 
   const handleLogout = () => {
-    fetch(`${API}/api/auth/logout`, {
-      method: 'POST', headers, credentials: 'include',
-    }).finally(() => {
-      document.cookie = 'token=; path=/; max-age=0';
-      window.location.href = '/auth/login';
-    });
+    document.cookie = 'token=; path=/; max-age=0';
+    window.location.href = '/auth/login';
   };
 
   const handleEnter = (room) => {
