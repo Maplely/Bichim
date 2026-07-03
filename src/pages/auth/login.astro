@@ -25,10 +25,13 @@ if (Astro.request.method === 'POST') {
       if (response.ok) {
         const data = await response.json();
         const secure = import.meta.env.PROD ? '; Secure' : '';
-        Astro.response.headers.set('Set-Cookie',
-          `token=${data.token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=604800${secure}`
-        );
-        return Astro.redirect('/chat');
+        return new Response(null, {
+          status: 302,
+          headers: {
+            Location: '/chat',
+            'Set-Cookie': `token=${data.token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=604800${secure}`,
+          },
+        });
       } else {
         const err = await response.json();
         errorMessage = err.erro || 'Credenciais inválidas.';
