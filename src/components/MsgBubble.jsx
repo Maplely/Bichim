@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { marked } from 'marked';
-import { FaEdit, FaTrash, FaReply, FaCheckDouble, FaDownload, FaThumbtack, FaClock, FaLanguage } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaReply, FaCheckDouble, FaDownload, FaThumbtack, FaClock, FaLanguage, FaFile } from 'react-icons/fa';
+import AudioPlayer from './Chat/AudioPlayer.jsx';
 
 marked.setOptions({ breaks: true, gfm: true });
 
@@ -85,18 +86,28 @@ function EqReactions({ reactions, onReact }) {
   );
 }
 
-function FilePreview({ file, onImageClick }) {
+function FilePreview({ file, onImageClick, M }) {
   if (!file) return null;
   const isImage = file.file_type?.startsWith('image/');
+  const isAudio = file.file_type?.startsWith('audio/');
+  const isVideo = file.file_type?.startsWith('video/');
   return (
     <div style={{ marginTop: 6 }}>
-      {isImage ? (
+      {isAudio ? (
+        <AudioPlayer file={file} M={M} />
+      ) : isVideo ? (
+        <video controls src={file.file_url}
+          onClick={() => onImageClick?.(file.file_url)}
+          style={{ maxWidth: 280, maxHeight: 240, borderRadius: 8, cursor: 'pointer' }}>
+          Seu navegador não suporta vídeo.
+        </video>
+      ) : isImage ? (
         <img src={file.file_url} alt={file.file_name}
           onClick={() => onImageClick?.(file.file_url)}
           style={{ maxWidth: 260, maxHeight: 200, borderRadius: 8, cursor: 'pointer' }} />
       ) : (
         <a href={file.file_url} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 6, color: M.blue, fontSize: '0.8rem', textDecoration: 'none', padding: '4px 8px', background: M.s0, borderRadius: 6 }}>
-          <FaDownload size={12} />
+          <FaFile size={12} />
           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{file.file_name}</span>
           {!!file.file_size && <span style={{ fontSize: '0.65rem', color: M.ov0 }}>{(file.file_size / 1024).toFixed(1)}KB</span>}
         </a>
@@ -184,7 +195,7 @@ export default function MsgBubble({ msg, grouped, isOwn, onReact, onEdit, onDele
         ) : (
           <div dangerouslySetInnerHTML={{ __html: renderMd(msg.content, preview) }} />
         )}
-        {msg.file_url && <FilePreview file={msg} onImageClick={onImageClick} />}
+        {msg.file_url && <FilePreview file={msg} onImageClick={onImageClick} M={M} />}
         {preview && !msg.file_url && <LinkPreview preview={preview} onImageClick={onImageClick} />}
         {msg.edited ? <span style={{ fontSize: '0.6rem', color: M.ov0, marginLeft: 4 }}>(editado)</span> : null}
 
