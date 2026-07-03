@@ -116,7 +116,7 @@ export default function Dashboard({ token: _token }) {
             <div style={{ width: 32, height: 32, borderRadius: '50%', background: M.surface0, animation: 'pulse 1.5s infinite' }} />
             <div style={{ width: 100, height: 14, background: M.surface0, borderRadius: 4, animation: 'pulse 1.5s infinite' }} />
           </div>
-          <ThemeToggle M={M} />
+          <ThemeToggle M={M} onToggle={(t) => setTheme(t)} />
         </header>
         <main style={{ maxWidth: '920px', margin: '0 auto', padding: '24px 16px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))', gap: '10px' }}>
@@ -141,7 +141,7 @@ export default function Dashboard({ token: _token }) {
           <span style={{ fontWeight: 700, fontSize: '1rem' }}>Bichim</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <ThemeToggle M={M} />
+          <ThemeToggle M={M} onToggle={(t) => setTheme(t)} />
           <div style={{
             width: 30, height: 30, borderRadius: '50%', background: M.mauve,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
