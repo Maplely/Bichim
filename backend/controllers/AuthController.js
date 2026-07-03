@@ -1,18 +1,7 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'node:crypto';
-import fs from 'node:fs';
-import path from 'node:path';
 import Usuario from '../models/Usuario.js';
 import { gerarToken, clearUserCache } from '../middlewares/auth.js';
-
-function logCodigo(email, codigo) {
-  const logPath = process.env.VERIFICATION_LOG_PATH || path.join(process.cwd(), 'data', 'codigos_verificacao.md');
-  const linha = `| ${new Date().toISOString().slice(0, 19).replace('T', ' ')} | ${email} | ${codigo} |\n`;
-  if (!fs.existsSync(logPath)) {
-    fs.writeFileSync(logPath, '# Códigos de Verificação\n\n| Data/Hora | Email | Código |\n|-----------|-------|--------|\n');
-  }
-  fs.appendFileSync(logPath, linha);
-}
 
 class AuthController {
   async signup(req, res) {
@@ -40,7 +29,6 @@ class AuthController {
 
       await Usuario.criar({ nome: nome.trim(), email, senha_hash, codigo_verificacao, codigo_expiracao });
       console.log(`[DEV] Código de verificação para ${email}: ${codigo_verificacao}`);
-      try { logCodigo(email, codigo_verificacao); } catch (e) { console.error('Erro ao logar código:', e); }
 
       res.status(201).json({ mensagem: 'Cadastro realizado! Verifique seu email para ativar a conta.' });
     } catch (err) {
@@ -144,7 +132,6 @@ class AuthController {
       const codigo_expiracao = new Date(Date.now() + 30 * 60 * 1000).toISOString();
       await Usuario.salvarCodigo(email, codigo, codigo_expiracao);
       console.log(`[DEV] Novo código para ${email}: ${codigo}`);
-      try { logCodigo(email, codigo); } catch (e) { console.error('Erro ao logar código:', e); }
 
       res.json({ mensagem: 'Código reenviado com sucesso' });
     } catch (err) {
