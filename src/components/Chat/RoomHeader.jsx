@@ -4,7 +4,7 @@ import { B } from './constants.js';
 
 export default function RoomHeader({
   room, M, mobile, copied, pinnedMsgs, showDesc, searchOpen, showPinned,
-  canModerate, members, membersOpen,
+  canModerate, members, membersOpen, typing, recordingUsers,
   onToggleSide, onToggleSearch, onTogglePinned, onOpenAudit, onToggleMembers,
   onCopyCode, onArchive, onDeleteRoom, onLeave, onOpenSidebar,
 }) {
@@ -42,6 +42,14 @@ export default function RoomHeader({
             {room?.name || 'Carregando...'}
           </span>
           {room?.description && <span style={{ fontSize: '0.68rem', color: M.ov0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{room.description}</span>}
+          {(typing?.length > 0 || recordingUsers?.length > 0) && (
+            <span style={{ fontSize: '0.68rem', color: M.green, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {[
+                typing?.length > 0 && `${typing.map(t => t.userName).join(', ')}${typing.length > 1 ? ' estão' : ' está'} digitando...`,
+                recordingUsers?.length > 0 && `${recordingUsers.map(t => t.userName).join(', ')}${recordingUsers.length > 1 ? ' estão' : ' está'} gravando áudio...`,
+              ].filter(Boolean).join(' · ')}
+            </span>
+          )}
         </div>
         {room?.code && (
           <button onClick={onCopyCode} style={{ border: `1px solid ${M.surface1}`, borderRadius: '6px', cursor: 'pointer', fontFamily: 'monospace', fontWeight: 600, fontSize: '0.72rem', transition: 'all 0.15s', background: copied ? M.green : 'none', color: copied ? M.crust : M.sub0, padding: '2px 7px', display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>

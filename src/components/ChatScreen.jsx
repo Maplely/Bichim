@@ -239,7 +239,7 @@ export default function ChatScreen({ roomId, token: _token }) {
   };
 
   const socketHook = useChatSocket({ roomId, token, userId: user?.id, setMsgs, setMembers });
-  const { socketRef, connected, typing, onlineUsers } = socketHook;
+  const { socketRef, connected, typing, recordingUsers, onlineUsers } = socketHook;
 
   const chatSend = useChatSend({
     input, replyingTo, roomId, headers, socketRef, taRef, user, msgs,
@@ -474,12 +474,14 @@ export default function ChatScreen({ roomId, token: _token }) {
   const startRecording = () => {
     if (!navigator.mediaDevices?.getUserMedia) { showToast('Gravação de áudio não suportada', 'error'); return; }
     setRecording(true);
+    socketRef.current?.emit('recording', { roomId: parseInt(roomId) });
     audioChunksRef.current = [];
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
       const recorder = new MediaRecorder(stream);
       mediaRecorderRef.current = recorder;
       recorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunksRef.current.push(e.data); };
       recorder.onstop = () => {
+        socketRef.current?.emit('stop-recording', { roomId: parseInt(roomId) });
         stream.getTracks().forEach(t => t.stop());
         const blob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         if (blob.size > 0) {
@@ -647,8 +649,11 @@ export default function ChatScreen({ roomId, token: _token }) {
   }, [roomId]);
 
   const SW = 232;
-  const typingText = typing.length > 0
-    ? `${typing.map(t => t.userName).join(', ')}${typing.length > 1 ? ' estão' : ' está'} digitando...`
+  const typingText = (typing.length > 0 || recordingUsers.length > 0)
+    ? [
+        typing.length > 0 && `${typing.map(t => t.userName).join(', ')}${typing.length > 1 ? ' estão' : ' está'} digitando...`,
+        recordingUsers.length > 0 && `${recordingUsers.map(t => t.userName).join(', ')}${recordingUsers.length > 1 ? ' estão' : ' está'} gravando áudio...`,
+      ].filter(Boolean).join(' · ')
     : null;
   const canModerate = room?.is_owner || room?.role === 'admin';
 
@@ -712,6 +717,7 @@ export default function ChatScreen({ roomId, token: _token }) {
           room={room} M={M} mobile={mobile} copied={copied} pinnedMsgs={pinnedMsgs}
           showDesc={showDesc} searchOpen={searchOpen} showPinned={showPinned}
           canModerate={canModerate} members={members} membersOpen={membersOpen}
+          typing={typing} recordingUsers={recordingUsers}
           onToggleSide={() => setShowDesc(s => !s)}
           onToggleSearch={() => setSearchOpen(s => !s)}
           onTogglePinned={() => setShowPinned(s => !s)}

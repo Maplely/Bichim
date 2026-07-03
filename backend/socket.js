@@ -29,6 +29,22 @@ export function setupSocket(io) {
   io.on('connection', (socket) => {
     const userRooms = new Set();
     const typingTimers = {};
+    const typingUsers = {};
+    const recordingUsers = {};
+
+    function broadcastTyping(roomId) {
+      const users = Object.entries(typingUsers[roomId] || {}).map(([id, name]) => ({
+        userId: parseInt(id), userName: name,
+      }));
+      socket.to(`room:${roomId}`).emit('typing', { roomId, users });
+    }
+
+    function broadcastRecording(roomId) {
+      const users = Object.entries(recordingUsers[roomId] || {}).map(([id, name]) => ({
+        userId: parseInt(id), userName: name,
+      }));
+      socket.to(`room:${roomId}`).emit('recording', { roomId, users });
+    }
 
     socket.on('join-room', async (roomId) => {
       try {
@@ -60,33 +76,43 @@ export function setupSocket(io) {
     socket.on('typing', (data) => {
       const { roomId } = data;
       if (!roomId) return;
+      if (!typingUsers[roomId]) typingUsers[roomId] = {};
+      typingUsers[roomId][socket.userId] = socket.userName;
+
       clearTimeout(typingTimers[`${socket.userId}:${roomId}`]);
       typingTimers[`${socket.userId}:${roomId}`] = setTimeout(() => {
-        socket.to(`room:${roomId}`).emit('typing', {
-          roomId,
-          users: [],
-        });
+        if (typingUsers[roomId]) delete typingUsers[roomId][socket.userId];
+        broadcastTyping(roomId);
       }, 3000);
 
-      const rooms = io.sockets.adapter.rooms.get(`room:${roomId}`);
-      const typingUsers = [];
-      if (rooms) {
-        for (const sid of rooms) {
-          const s = io.sockets.sockets.get(sid);
-          if (s && s.userId !== socket.userId) {
-            typingUsers.push({ userId: s.userId, userName: getUserName(s.userId) });
-          }
-        }
-      }
-      socket.to(`room:${roomId}`).emit('typing', {
-        roomId,
-        users: typingUsers,
-      });
+      broadcastTyping(roomId);
     });
 
     socket.on('stop-typing', ({ roomId }) => {
       clearTimeout(typingTimers[`${socket.userId}:${roomId}`]);
-      socket.to(`room:${roomId}`).emit('typing', { roomId, users: [] });
+      if (typingUsers[roomId]) delete typingUsers[roomId][socket.userId];
+      broadcastTyping(roomId);
+    });
+
+    socket.on('recording', (data) => {
+      const { roomId } = data;
+      if (!roomId) return;
+      if (!recordingUsers[roomId]) recordingUsers[roomId] = {};
+      recordingUsers[roomId][socket.userId] = socket.userName;
+
+      clearTimeout(typingTimers[`rec:${socket.userId}:${roomId}`]);
+      typingTimers[`rec:${socket.userId}:${roomId}`] = setTimeout(() => {
+        if (recordingUsers[roomId]) delete recordingUsers[roomId][socket.userId];
+        broadcastRecording(roomId);
+      }, 3000);
+
+      broadcastRecording(roomId);
+    });
+
+    socket.on('stop-recording', ({ roomId }) => {
+      clearTimeout(typingTimers[`rec:${socket.userId}:${roomId}`]);
+      if (recordingUsers[roomId]) delete recordingUsers[roomId][socket.userId];
+      broadcastRecording(roomId);
     });
 
     socket.on('new-message', async (data, callback) => {
@@ -208,6 +234,10 @@ export function setupSocket(io) {
 
     socket.on('disconnect', async () => {
       for (const roomId of userRooms) {
+        if (typingUsers[roomId]) delete typingUsers[roomId][socket.userId];
+        if (recordingUsers[roomId]) delete recordingUsers[roomId][socket.userId];
+        broadcastTyping(roomId);
+        broadcastRecording(roomId);
         const sockets = await io.in(`room:${roomId}`).fetchSockets();
         const online = sockets.map(s => s.userId).filter(Boolean);
         io.to(`room:${roomId}`).emit('online-users', { roomId, users: online });

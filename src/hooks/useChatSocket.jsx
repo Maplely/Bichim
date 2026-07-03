@@ -6,6 +6,7 @@ export default function useChatSocket({ roomId, token, userId, setMsgs, setMembe
   const socketRef = useRef(null);
   const [connected, setConnected] = useState(true);
   const [typing, setTyping] = useState([]);
+  const [recordingUsers, setRecordingUsers] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState(new Set());
 
   useEffect(() => {
@@ -22,8 +23,11 @@ export default function useChatSocket({ roomId, token, userId, setMsgs, setMembe
     s.on('message-edited', (msg) => setMsgs(prev => prev.map(m => m.id === msg.id ? { ...m, content: msg.content, edited: true } : m)));
     s.on('reaction-update', ({ message_id, reactions }) => setMsgs(prev => prev.map(m => m.id === message_id ? { ...m, reactions } : m)));
 
-    s.on('typing', ({ userId, roomId: rId, users }) => {
-      if (rId === parseInt(roomId)) setTyping(users.filter(u => u.userId !== userId));
+    s.on('typing', ({ roomId: rId, users }) => {
+      if (rId === parseInt(roomId)) setTyping(users);
+    });
+    s.on('recording', ({ roomId: rId, users }) => {
+      if (rId === parseInt(roomId)) setRecordingUsers(users);
     });
     s.on('online-users', ({ roomId: rId, users }) => {
       if (rId === parseInt(roomId)) setOnlineUsers(new Set(users));
@@ -40,10 +44,10 @@ export default function useChatSocket({ roomId, token, userId, setMsgs, setMembe
     });
 
     return () => {
-      if (s.connected) { s.emit('leave-room', parseInt(roomId)); s.emit('stop-typing', { roomId: parseInt(roomId) }); }
+      if (s.connected) { s.emit('leave-room', parseInt(roomId)); s.emit('stop-typing', { roomId: parseInt(roomId) }); s.emit('stop-recording', { roomId: parseInt(roomId) }); }
       s.disconnect();
     };
   }, [roomId, token, userId]);
 
-  return { socketRef, connected, typing, onlineUsers };
+  return { socketRef, connected, typing, recordingUsers, onlineUsers };
 }
