@@ -84,6 +84,7 @@ export default function Dashboard({ token: _token }) {
   }, []);
 
   const handleLogout = () => {
+    fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
     document.cookie = 'token=; path=/; max-age=0';
     window.location.href = '/auth/login';
   };

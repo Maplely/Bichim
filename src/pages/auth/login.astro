@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ThemeToggle from '../../components/ThemeToggle.jsx';
-import { setSessionToken } from '../../lib/auth/sessao';
 const PORT = process.env.PORT || 3000;
 const API_BASE = `http://127.0.0.1:${PORT}`;
 const erroParam = Astro.url.searchParams.get('erro');
@@ -25,7 +24,10 @@ if (Astro.request.method === 'POST') {
 
       if (response.ok) {
         const data = await response.json();
-        setSessionToken(Astro.cookies, data.token);
+        const secure = import.meta.env.PROD ? '; Secure' : '';
+        Astro.response.headers.set('Set-Cookie',
+          `token=${data.token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=604800${secure}`
+        );
         return Astro.redirect('/chat');
       } else {
         const err = await response.json();

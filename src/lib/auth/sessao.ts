@@ -9,7 +9,7 @@ export function getSessionToken(cookies: AstroCookies): string | null {
 export function setSessionToken(cookies: AstroCookies, token: string): void {
   cookies.set(SESSION_COOKIE, token, {
     httpOnly: true,
-    secure: false,
+    secure: import.meta.env.PROD,
     sameSite: 'lax',
     path: '/',
     maxAge: 60 * 60 * 24 * 7,
