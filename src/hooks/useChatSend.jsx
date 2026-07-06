@@ -111,7 +111,10 @@ export default function useChatSend({
 
     const payload = { roomId: parseInt(roomId), content, reply_to: replyTo };
 
-    const doFetch = () => {
+    if (socket?.connected) {
+      socket.emit('new-message', payload);
+      setSending(false);
+    } else {
       fetch(`/api/rooms/${roomId}/messages`, {
         method: 'POST', headers, credentials: 'include',
         body: JSON.stringify({ content, reply_to: replyTo }),
@@ -121,13 +124,7 @@ export default function useChatSend({
           processPreviews(msg.content);
         }
       }).finally(() => setSending(false));
-    };
-
-    if (socket?.connected) {
-      socket.emit('new-message', payload, (res) => {
-        if (!res?.success) doFetch(); else setSending(false);
-      });
-    } else { doFetch(); }
+    }
     setTimeout(() => taRef.current?.focus(), 0);
   }, [input, sending, roomId, headers, replyingTo, user, msgs, socketRef, taRef, setInput, setReplyingTo, setMsgs, processPreviews, toggleSaveMsg, showToast, setShowSlashHelp, handleGifSearch, handleSendPoll]);
 

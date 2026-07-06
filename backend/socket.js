@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from './middlewares/auth.js';
 import Message from './models/Message.js';
 import Room from './models/Room.js';
+import Usuario from './models/Usuario.js';
 import db from './config/db.js';
 
 function getUserName(userId) {
@@ -10,13 +11,20 @@ function getUserName(userId) {
 }
 
 export function setupSocket(io) {
-  io.use((socket, next) => {
+  io.use(async (socket, next) => {
     const token = socket.handshake.auth?.token || socket.handshake.query?.token;
     if (!token) {
       return next(new Error('Token não fornecido'));
     }
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
+      const usuario = await Usuario.buscarPorId(decoded.id);
+      if (!usuario) {
+        return next(new Error('Usuário não encontrado'));
+      }
+      if (usuario.token_version !== decoded.token_version) {
+        return next(new Error('Sessão expirada. Faça login novamente.'));
+      }
       socket.userId = decoded.id;
       socket.userEmail = decoded.email;
       socket.userName = getUserName(decoded.id);
@@ -48,6 +56,15 @@ export function setupSocket(io) {
 
     socket.on('join-room', async (roomId) => {
       try {
+        const room = db.get(`SELECT is_dm FROM rooms WHERE id = ?`, [roomId]);
+        if (!room) {
+          socket.emit('error', { message: 'Sala não encontrada' });
+          return;
+        }
+        if (!room.is_dm && !Room.isMembro(roomId, socket.userId)) {
+          socket.emit('error', { message: 'Você não é membro desta sala' });
+          return;
+        }
         socket.join(`room:${roomId}`);
         userRooms.add(roomId);
         Room.atualizarAtividade(roomId);
@@ -115,6 +132,13 @@ export function setupSocket(io) {
       broadcastRecording(roomId);
     });
 
+    function checkMember(roomId) {
+      const room = db.get(`SELECT is_dm FROM rooms WHERE id = ?`, [roomId]);
+      if (!room) return 'Sala não encontrada';
+      if (!room.is_dm && !Room.isMembro(roomId, socket.userId)) return 'Você não é membro desta sala';
+      return null;
+    }
+
     socket.on('new-message', async (data, callback) => {
       try {
         const { roomId, content, reply_to } = data;
@@ -122,6 +146,8 @@ export function setupSocket(io) {
           if (callback) callback({ error: 'Dados inválidos' });
           return;
         }
+        const err = checkMember(roomId);
+        if (err) { if (callback) callback({ error: err }); return; }
         if (Message.checkMuted(roomId, socket.userId)) {
           if (callback) callback({ error: 'Você está silenciado nesta sala' });
           return;
@@ -147,6 +173,7 @@ export function setupSocket(io) {
       try {
         const { messageId, content, roomId } = data;
         if (!messageId || !content?.trim()) return;
+        if (checkMember(roomId)) return;
         const edited = await Message.editar(messageId, socket.userId, content.trim());
         if (edited) {
           io.to(`room:${roomId}`).emit('message-edited', edited);
@@ -160,6 +187,7 @@ export function setupSocket(io) {
       try {
         const { messageId, roomId } = data;
         if (!messageId) return;
+        if (checkMember(roomId)) return;
         await Message.deletar(messageId, socket.userId);
         io.to(`room:${roomId}`).emit('message-deleted', { id: messageId });
       } catch (err) {
@@ -171,6 +199,7 @@ export function setupSocket(io) {
       try {
         const { messageId, emoji, roomId } = data;
         if (!messageId || !emoji) return;
+        if (checkMember(roomId)) return;
         const reactions = await Message.toggleReaction(messageId, socket.userId, emoji);
         io.to(`room:${roomId}`).emit('reaction-update', { message_id: messageId, reactions });
       } catch (err) {
@@ -182,6 +211,7 @@ export function setupSocket(io) {
       try {
         const { roomId, messageIds } = data;
         if (!roomId || !messageIds?.length) return;
+        if (checkMember(roomId)) return;
         const now = new Date().toISOString();
         messageIds.forEach(mid => {
           db.run(`INSERT OR IGNORE INTO message_reads (message_id, user_id, room_id, read_at) VALUES (?, ?, ?, ?)`, [mid, socket.userId, roomId, now]);
@@ -200,6 +230,7 @@ export function setupSocket(io) {
       try {
         const { roomId, question, options } = data;
         if (!roomId || !question || !options?.length) return;
+        if (checkMember(roomId)) return;
         const pollId = db.run(`INSERT INTO polls (room_id, question, created_by) VALUES (?, ?, ?)`, [roomId, question, socket.userId]).insertId;
         options.forEach(opt => db.run(`INSERT INTO poll_options (poll_id, text) VALUES (?, ?)`, [pollId, opt]));
         const poll = db.get(`SELECT * FROM polls WHERE id = ?`, [pollId]);
@@ -215,6 +246,7 @@ export function setupSocket(io) {
       try {
         const { pollId, optionId, roomId } = data;
         if (!pollId || !optionId) return;
+        if (checkMember(roomId)) return;
         const poll = db.get(`SELECT * FROM polls WHERE id = ?`, [pollId]);
         if (!poll || poll.is_closed) return;
         const existing = db.get(`SELECT * FROM poll_votes WHERE poll_id = ? AND user_id = ?`, [pollId, socket.userId]);

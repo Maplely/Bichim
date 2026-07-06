@@ -18,7 +18,7 @@ class Room {
 
   buscarDM(userId1, userId2) {
     return db.get(`
-      SELECT r.* FROM rooms r
+      SELECT r.id, r.name, r.code, r.description, r.is_dm, r.is_announcement, r.creator_id, r.last_activity, r.slow_mode, r.category, r.banner_url, r.invite_expires_at, r.invite_max_uses, r.invite_uses, r.disappear_after, r.archived, r.invite_code, r.created_at FROM rooms r
       WHERE r.is_dm = 1 AND (
         SELECT COUNT(*) FROM room_members WHERE room_id = r.id AND user_id IN (?, ?)
       ) = 2 AND (
@@ -29,15 +29,15 @@ class Room {
   }
 
   buscarPorId(id) {
-    return db.get(`SELECT * FROM rooms WHERE id = ?`, [id]);
+    return db.get(`SELECT id, name, code, description, is_dm, is_announcement, creator_id, last_activity, slow_mode, category, banner_url, invite_expires_at, invite_max_uses, invite_uses, disappear_after, archived, invite_code, created_at FROM rooms WHERE id = ?`, [id]);
   }
 
   buscarPorCodigo(code) {
-    return db.get(`SELECT * FROM rooms WHERE code = ?`, [code]);
+    return db.get(`SELECT id, name, code, description, is_dm, is_announcement, creator_id, last_activity, slow_mode, category, banner_url, invite_expires_at, invite_max_uses, invite_uses, disappear_after, archived, invite_code, created_at FROM rooms WHERE code = ?`, [code]);
   }
 
   listarPorUsuario(userId, includeArchived = false) {
-    let sql = `SELECT r.*, rm.is_owner, rm.role, rm.is_favorite,
+    let sql = `SELECT r.id, r.name, r.code, r.description, r.is_dm, r.is_announcement, r.creator_id, r.last_activity, r.slow_mode, r.category, r.banner_url, r.invite_expires_at, r.invite_max_uses, r.invite_uses, r.disappear_after, r.archived, r.invite_code, r.created_at, rm.is_owner, rm.role, rm.is_favorite,
         (SELECT COUNT(*) FROM room_members WHERE room_id = r.id) AS member_count
        FROM rooms r
        JOIN room_members rm ON rm.room_id = r.id

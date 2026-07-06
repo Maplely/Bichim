@@ -2,13 +2,14 @@ import db from '../config/db.js';
 
 class Message {
   criar({ room_id, user_id, content, reply_to, expires_at }) {
+    let result;
     if (reply_to) {
-      db.run(
+      result = db.run(
         `INSERT INTO messages (room_id, user_id, content, reply_to, expires_at) VALUES (?, ?, ?, ?, ?)`,
         [room_id, user_id, content, reply_to, expires_at || null]
       );
     } else {
-      db.run(
+      result = db.run(
         `INSERT INTO messages (room_id, user_id, content, expires_at) VALUES (?, ?, ?, ?)`,
         [room_id, user_id, content, expires_at || null]
       );
@@ -17,7 +18,7 @@ class Message {
       `UPDATE rooms SET last_activity = datetime('now') WHERE id = ?`,
       [room_id]
     );
-    return this.buscarPorId(db.get('SELECT MAX(id) as id FROM messages').id);
+    return this.buscarPorId(result.insertId);
   }
 
   buscarPorId(id) {

@@ -43,6 +43,7 @@ class DatabaseWrapper {
     this.db.exec(`CREATE INDEX IF NOT EXISTS idx_rooms_code ON rooms(code)`);
     this.db.exec(`CREATE INDEX IF NOT EXISTS idx_saved_user ON saved_messages(user_id)`);
     this.db.exec(`CREATE INDEX IF NOT EXISTS idx_audit_room ON audit_log(room_id)`);
+    this.db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_message_reactions_unique ON message_reactions(message_id, user_id, emoji)`);
   }
 
   prepare(sql) {

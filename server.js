@@ -32,8 +32,14 @@ setInterval(() => {
 const SCHEDULE_INTERVAL = 10 * 1000;
 setInterval(() => {
   try {
-    const deleted = Room.deleteExpiredMessages();
-    if (deleted > 0) console.log(`[schedule] ${deleted} mensagem(ns) expirada(s) removida(s)`);
+    const expired = Room.getExpiredMessages();
+    if (expired.length > 0) {
+      expired.forEach(msg => {
+        io.to(`room:${msg.room_id}`).emit('message-deleted', { id: msg.id });
+      });
+      Room.deleteExpiredMessages();
+      console.log(`[schedule] ${expired.length} mensagem(ns) expirada(s) removida(s)`);
+    }
   } catch (err) {
     console.error('[schedule] Erro ao remover mensagens expiradas:', err.message);
   }

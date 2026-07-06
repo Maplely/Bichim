@@ -185,6 +185,11 @@ class RoomController {
   async membros(req, res) {
     try {
       const roomId = req.params.id;
+      const room = await Room.buscarPorId(roomId);
+      if (!room) return res.status(404).json({ erro: 'Sala não encontrada' });
+      if (!room.is_dm && !Room.isMembro(roomId, req.usuarioId)) {
+        return res.status(403).json({ erro: 'Você não é membro desta sala' });
+      }
       const members = await Room.listarMembros(roomId);
       res.json(members);
     } catch (err) {
