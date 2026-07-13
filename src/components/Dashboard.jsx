@@ -132,7 +132,7 @@ export default function Dashboard({ token: _token }) {
         justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 10,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src={M.base === '#0F0F0F' ? '/BichimDarkMode.svg' : '/BichimWhiteMode.svg'} alt="Bichim" style={{ width: 40, height: 40, borderRadius: '50%' }} />
+          <img src={M.base === '#0F0F0F' ? '/BichimDarkMode.svg' : '/BichimWhiteMode.svg'} alt="Bichim" style={{ width: 48, height: 48, borderRadius: '50%' }} />
           <span style={{ fontWeight: 700, fontSize: '1rem' }}>Bichim</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -190,7 +190,7 @@ export default function Dashboard({ token: _token }) {
 
         {rooms.length === 0 && (
           <div style={{ textAlign: 'center', padding: '80px 20px', color: M.sub0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-            <img src={M.base === '#0F0F0F' ? '/BichimDarkMode.svg' : '/BichimWhiteMode.svg'} alt="Bichim" style={{ width: 56, height: 56, opacity: 0.2 }} />
+            <img src={M.base === '#0F0F0F' ? '/BichimDarkMode.svg' : '/BichimWhiteMode.svg'} alt="Bichim" style={{ width: 64, height: 64, opacity: 0.2 }} />
             <p style={{ margin: 0, fontSize: '0.95rem', fontWeight: 600, color: M.text }}>Nenhuma sala ainda</p>
             <p style={{ margin: 0, fontSize: '0.83rem' }}>Crie uma sala ou entre com um código para começar a conversar.</p>
           </div>
