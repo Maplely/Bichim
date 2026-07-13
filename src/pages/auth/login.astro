@@ -52,7 +52,8 @@ if (Astro.request.method === 'POST') {
     <div style="position:absolute;top:20px;right:20px"><ThemeToggle client:load /></div>
     <div style="text-align:center;margin-bottom:32px">
       <div style="width:58px;height:58px;border-radius:18px;background:var(--mauve);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 32px var(--mauve)">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--crust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <img src="/BichimDarkMode.svg" alt="Bichim" class="logo-dark" style="width:40px;height:40px" />
+        <img src="/BichimWhiteMode.svg" alt="Bichim" class="logo-light" style="width:40px;height:40px;display:none" />
       </div>
       <h1 style="margin:0 0 6px;font-size:1.65rem;font-weight:800;letter-spacing:-0.02em">Bichim</h1>
       <p style="margin:0;color:var(--subtext0);font-size:0.85rem">Seu servidor. Seus dados. Seu controle.</p>
@@ -107,5 +108,11 @@ if (Astro.request.method === 'POST') {
       emailInput.addEventListener('input', () => { if (errorEl.style.display !== 'none') errorEl.style.display = 'none'; });
       senhaInput.addEventListener('input', () => { if (errorEl.style.display !== 'none') errorEl.style.display = 'none'; });
     </script>
+    <style is:global>
+      .logo-dark { display: block; }
+      .logo-light { display: none; }
+      [data-theme="light"] .logo-dark { display: none !important; }
+      [data-theme="light"] .logo-light { display: block !important; }
+    </style>
   </main>
 </BaseLayout>

@@ -23,7 +23,7 @@ export function playMsgSound() {
 
 export function pushNotify(title, body) {
   if (Notification.permission === 'granted') {
-    new Notification(title, { body, icon: '/favicon.svg' });
+    new Notification(title, { body, icon: '/BichimDarkMode.svg' });
   }
 }
 
@@ -34,7 +34,7 @@ export function setFaviconBadge(count) {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#0F0F0F"/><text x="16" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#FF6B6B">${count > 9 ? '9+' : count}</text></svg>`;
     c.href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
   } else {
-    c.href = '/favicon.svg';
+    c.href = '/BichimDarkMode.svg';
   }
   document.head.appendChild(c);
 }

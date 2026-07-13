@@ -1,19 +1,15 @@
-import { FaComment, FaTimes } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import ThemeToggle from '../ThemeToggle.jsx';
 import { B } from './constants.js';
 
 export default function SidebarHeader({ setTheme, mobile, onClose, M }) {
+  const logoSrc = M.base === '#0F0F0F' ? '/BichimDarkMode.svg' : '/BichimWhiteMode.svg';
   return (
     <div style={{
       padding: '13px 14px', borderBottom: `1px solid ${M.surface0}`,
       display: 'flex', alignItems: 'center', gap: '8px',
     }}>
-      <div style={{
-        width: 28, height: 28, borderRadius: '50%', background: M.mauve,
-        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-      }}>
-        <FaComment size={13} color={M.crust} />
-      </div>
+      <img src={logoSrc} alt="Bichim" style={{ width: 28, height: 28, borderRadius: '50%', flexShrink: 0 }} />
       <span style={{ fontWeight: 700, fontSize: '0.88rem', flex: 1 }}>Bichim</span>
       <ThemeToggle onToggle={(t) => setTheme(t)} M={M} />
       {mobile && (
