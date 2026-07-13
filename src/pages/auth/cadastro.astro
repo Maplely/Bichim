@@ -106,7 +106,7 @@ if (Astro.request.method === 'POST') {
       if (logo) {
         function atualizarLogoSrc() {
           const tema = document.documentElement.dataset.theme || localStorage.getItem('chat-theme') || 'dark';
-          logo.src = (tema === 'light' ? '/BichimWhiteMode.svg' : '/BichimDarkMode.svg') + '?v=' + Date.now();
+          logo.src = tema === 'light' ? '/BichimWhiteMode.svg' : '/BichimDarkMode.svg';
         }
         atualizarLogoSrc();
         new MutationObserver(atualizarLogoSrc).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
