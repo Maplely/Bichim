@@ -52,7 +52,7 @@ O banco SQLite e as migrações rodam automaticamente na primeira inicializaçã
 
 ## Estrutura
 
-```
+
 ├── backend/
 │   ├── config/db.js          # Conexão SQLite + migrações
 │   ├── controllers/          # Auth, Room, Message, Preview
@@ -91,4 +91,4 @@ Tema dark/light controlado via `data-theme` com CSS custom properties definidas 
 | `chatReceived` | `#2A2A2A` | `#F0EDE8` | Bolha de mensagem alheia |
 
 **Avatar palette:** `#EA5A3E`, `#C4871C`, `#60A5FA`, `#4ADE80`, `#FDB022`, `#BE8700`, `#C4B5A0`, `#FF8A6B`
-```
+
