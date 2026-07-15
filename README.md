@@ -52,7 +52,7 @@ O banco SQLite e as migrações rodam automaticamente na primeira inicializaçã
 
 ## Estrutura
 
-
+```
 ├── backend/
 │   ├── config/db.js          # Conexão SQLite + migrações
 │   ├── controllers/          # Auth, Room, Message, Preview
@@ -65,7 +65,7 @@ O banco SQLite e as migrações rodam automaticamente na primeira inicializaçã
 │   └── pages/                # Rotas Astro
 ├── server.js                 # Entrypoint
 └── db/init.sql               # Schema de referência
-
+```
 ## Paleta de Cores
 
 Tema dark/light controlado via `data-theme` com CSS custom properties definidas em `src/layouts/BaseLayout.astro` e objetos JS em `src/components/Chat/constants.js`.
